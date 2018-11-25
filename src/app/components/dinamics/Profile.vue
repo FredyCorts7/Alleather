@@ -15,10 +15,9 @@
         <label class="menu" for="check">|||</label>
         <div class="left-panel">
             <ul >
-                <router-link to="/" class="rout"><li class="items" v-for="p of fun" :key="p"><img :src=p[1] />{{p[0]}}</li></router-link>
+                <router-link to="/" class="rout"><li class="items" v-for="p of fun"><img :src=p[1] />{{p[0]}}</li></router-link>
             </ul>
         </div>
-        <router-view/>
     </div>
 </template>
 
@@ -32,7 +31,7 @@
         background-color: rgba(64, 64, 65, 0.9);
         border-radius: 0 0.5rem 0.5rem 0;
         position: fixed;
-        top: 0%;
+        top: 50px;
         left: 0%;
         font-size: 2rem;
         color: white;
@@ -96,8 +95,11 @@ export default {
             fun: []
         }
     },
+    created() {
+        this.getFunctionality()
+    },
     methods: {
-        getfunctionality(){
+        getFunctionality () {
             fetch('/api/functionality/')
                 .then(res => res.json())
                 .then(data => {
@@ -105,9 +107,6 @@ export default {
                     this.fun = data
                 })
         }
-    },
-    beforeCreate() {
-        this.getfunctionality()
     }
 }
 </script>

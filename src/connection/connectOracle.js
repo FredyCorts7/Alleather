@@ -9,8 +9,7 @@ cns = {
 function error (err, rs, cn) {
     if (err) {
         console.log(err.message)
-        rs.send(err.message)
-        //rs.contentType('application/json')
+        rs.send({"Error": err})
         if (cn != null) close(cn);
         return -1;
     } else return 0;
@@ -18,18 +17,21 @@ function error (err, rs, cn) {
 
 function open (sql, binds, dml, rs) {
     oracle.getConnection(cns, function(err, cn) {
-        if (error(err, rs, null) == -1) return -1;
-        cn.execute(sql, binds, {autoCommit: dml}, function(err, result) {
-            if (error(err, rs, cn) == -1) return -1;
-            //rs.contentType('application/json')
-            if (dml)
-                rs.send(JSON.stringify(result.rowAffected))
-            else {
-                console.log(result.metaData)
-                rs.send(JSON.stringify(result.rows))
-            }
-            close(cn)
-        })
+        if (error(err, rs, null) == -1) return;
+        try {
+            cn.execute(sql, binds, {autoCommit: dml}, function(err, result) {
+                if (error(err, rs, cn) == -1) return;
+                if (dml)
+                    rs.send(JSON.stringify(result.rowAffected))
+                else {
+                    console.log(result.metaData)
+                    rs.send(JSON.stringify(result.rows))
+                }
+                close(cn)
+            })   
+        } catch (error) {
+            rs.send({"Error": error})
+        }
     })
 }
 

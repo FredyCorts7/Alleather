@@ -145,7 +145,10 @@ export default {
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data.msj)
+            console.log(data)
+            if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+          })
+          .catch(err => {
             this.$toastr.info('successfully registered', 'Register')
             this.person.code = ''
             this.person.name = ''
