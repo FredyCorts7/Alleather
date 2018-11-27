@@ -12,6 +12,7 @@ import Login from './components/dinamics/Login.vue'
 import Page404 from './components/dinamics/Page404.vue'
 import Register from './components/dinamics/Register.vue'
 import Profile from './components/dinamics/Profile.vue'
+import ManageEmployee from './components/dinamics/funcionality/ManageEmployee.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
@@ -52,7 +53,14 @@ const router = new Router({
     {
       path: '/profile',
       name: 'Profile',
-      component: Profile
+      component: Profile,
+      children: [
+        {
+          path: '/profile/manageemployees',
+          name: 'ManageEmployee',
+          component: ManageEmployee
+        }
+      ]
     }
   ]
 })

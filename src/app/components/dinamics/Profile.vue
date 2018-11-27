@@ -11,11 +11,12 @@
                 </b-col>
             </b-row>
         </div>
+        <router-view/>
         <input type="checkbox" class="checkbox" id="check">
         <label class="menu" for="check">|||</label>
         <div class="left-panel">
             <ul >
-                <router-link to="/" class="rout"><li class="items" v-for="p of fun"><img :src=p[1] />{{p[0]}}</li></router-link>
+                <li class="items" v-for="p of fun" :key="p"><router-link :to=p[2] class="rout"><img :src=p[1] />{{p[0]}}</router-link></li>
             </ul>
         </div>
     </div>
