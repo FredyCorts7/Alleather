@@ -33,7 +33,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="person of persons">
+              <tr v-for="person of persons" :key="person">
                 <td>{{person[0]}}</td>
                 <td>{{person[1]}}</td>
                 <td>{{person[2]}}</td>

@@ -19,7 +19,7 @@
         </b-carousel>
         <div class="container">
 			<div class="row">
-				<div class="col-md-4 col-xs-6" v-for="art in this.$root.articles">
+				<div class="col-md-4 col-xs-6" v-for="art in this.$root.articles" :key="art">
 					<div class="shop">
 						<div class="shop-img">
 							<img :src=art[3] />

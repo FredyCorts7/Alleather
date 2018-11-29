@@ -100,6 +100,7 @@ export default {
         address: '',
         rolid: 2
       },
+      open: true,
       image: null,
       options: [
         {value: '', text: 'Choose your sex...'},
