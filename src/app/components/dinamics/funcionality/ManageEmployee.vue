@@ -1,6 +1,12 @@
 <template>
-    <div class="flex-row align-items-center">
-    <b-container class="reg">
+  <div class="flex-row align-items-center manageemp">
+    <b-row class="justify-content-md-center">
+      <b-button @click="this.showInsert" class="colornav insertemp">Register</b-button>
+      <b-button class="colornav updateemp">Modify</b-button>
+      <b-button class="colornav deleteemp">Delete</b-button>
+      <b-button @click="this.showSelect" class="colornav selectemp">Show</b-button>
+    </b-row>
+    <div id="insert" class="container">
       <b-row class="justify-content-center">
         <b-col>
           <b-card no-body class="bg-dark regis">
@@ -70,19 +76,61 @@
                   </b-input-group-prepend>
                   <b-form-input required type="text" class="form-control" placeholder="Ex. Cll 22A #4-55 Ceiba" v-model="person.address"/>
                 </b-input-group>
-
-                <b-button variant="info" block @click="this.registerPerson">Create Account</b-button>
+                <b-button class="colornav" block @click="this.registerPerson">Create Account</b-button>
               </b-form>
             </b-card-body>
           </b-card>
         </b-col>
       </b-row>
-    </b-container>
     </div>
+    <div id="select" class="justify-content-md-center">
+      <div class="col-md-8">
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Sex</th>
+                <th>Email</th>
+                <th>Birthday</th>
+                <th>Image</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="emp of employees" :key="emp">
+                <td>{{emp[0]}}</td>
+                <td>{{emp[1]}}</td>
+                <td>{{emp[2]}}</td>
+                <td>{{emp[3]}}</td>
+                <td><picture><img class="useritem" :src=emp[4] /></picture></td>
+                <td>{{emp[5]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
 </template>
 
 <style>
-
+  .colornav {
+    background-color: #68B0AB;
+    border-color: #68B0AB;
+    margin: 0 5px
+  }
+  .colornav:hover {
+    background-color: rgb(88, 148, 144);
+    border-color: rgb(88, 148, 144)
+  }
+  #update {
+    display: none
+  }
+  #delete {
+    display: none
+  }
+  #select {
+    display: none
+  }
 </style>
 
 <script>
@@ -100,6 +148,7 @@ export default {
         address: '',
         rolid: 2
       },
+      employees: [],
       open: true,
       image: null,
       options: [
@@ -149,6 +198,23 @@ export default {
             this.person.address = ''
           })
       } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
+    },
+    showInsert () {
+      document.getElementById('insert').style.display = 'block'
+      document.getElementById('select').style.display = 'none'
+    },
+    showSelect () {
+      this.getEmployees()
+      document.getElementById('insert').style.display = 'none'
+      document.getElementById('select').style.display = 'block'
+    },
+    getEmployees: function () {
+      fetch('/api/employee/' + this.person.rolid)
+        .then(res => res.json())
+        .then(data => {
+          this.employees = data
+          console.log(this.employees)
+        })
     }
   }
 }

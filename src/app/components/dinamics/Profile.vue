@@ -1,16 +1,5 @@
 <template>
     <div class="flex-row align-items-center page">
-        <div class="container">
-            <b-row class="justify-content-center">
-                <b-col md="6">
-                    <div class="clearfix">
-                        <h1 class="float-left display-3 mr-4">Your Profile</h1>
-                        <h4 class="pt-3">Thanks for your services</h4>
-                        <p class="text-muted">The functionalities you can see in the top lateral nav.</p>
-                    </div>
-                </b-col>
-            </b-row>
-        </div>
         <router-view/>
         <input type="checkbox" class="checkbox" id="check">
         <label class="menu" for="check">|||</label>
@@ -97,7 +86,11 @@ export default {
         }
     },
     created() {
-        this.getFunctionality()
+        if (this.$session.exists()) this.getFunctionality()
+        else {
+            this.$router.push('/')
+            this.$toastr.warning('No tiene el permiso para acceder a éste recurso')
+        }
     },
     methods: {
         getFunctionality () {

@@ -12,6 +12,7 @@ import Login from './components/dinamics/Login.vue'
 import Page404 from './components/dinamics/Page404.vue'
 import Register from './components/dinamics/Register.vue'
 import Profile from './components/dinamics/Profile.vue'
+import Index from './components/dinamics/funcionality/Index.vue'
 import ManageEmployee from './components/dinamics/funcionality/ManageEmployee.vue'
 
 Vue.use(BootstrapVue)
@@ -52,9 +53,18 @@ const router = new Router({
     },
     {
       path: '/profile',
+      redirect: '/profile/index'
+    },
+    {
+      path: '/profile',
       name: 'Profile',
       component: Profile,
       children: [
+        {
+          path: '/profile/index',
+          name: 'Index',
+          component: Index
+        },
         {
           path: '/profile/manageemployees',
           name: 'ManageEmployee',

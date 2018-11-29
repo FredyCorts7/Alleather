@@ -13,6 +13,7 @@ server.use(express.json())
 server.use('/api/person', require('./routes/person'))
 server.use('/api/article', require('./routes/article'))
 server.use('/api/functionality', require('./routes/functionality'))
+server.use('/api/employee', require('./routes/employee'))
 
 //static files
 server.use(express.static(__dirname + '/public'))
