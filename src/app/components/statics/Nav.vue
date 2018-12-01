@@ -5,22 +5,22 @@
             <b-navbar-brand class="titlenav"><router-link to="/" class="rout"><b-img src="imgs/logo.png" class="logo"/>ALLEATHER</router-link></b-navbar-brand>
             <b-collapse is-nav id="nav_collapse menu">
                 <b-navbar-nav class="ml-auto t-sha">
+                    <b-nav-item class="t-shai" active><router-link to="/" class="rout">Home</router-link></b-nav-item>
+                    <b-nav-item class="t-shai" active>
+                        <b-img src="imgs/nav/corazon.png" class="icon"/>
+                    </b-nav-item>
+                    <b-nav-item class="t-shai" active>
+                        <b-img src="imgs/nav/carrito.png" class="icon"/>
+                    </b-nav-item>
+                    <b-nav-item-dropdown>
+                        <template slot="button-content">
+                            <b-img :src=this.$root.credentials[1] class="user"/><a class="decor-a">{{this.$root.credentials[0]}}</a>
+                        </template>
+                        <b-dropdown-item class="backg rout2" v-if="!this.$session.exists()" @click="this.existSession">Log in</b-dropdown-item>
+                        <b-dropdown-item class="backg" v-if="this.$session.exists()"><router-link to="/profile" class="rout2"><b-img :src=this.$root.credentials[1] class="useritem"/><a class="decor-a">Profile</a></router-link></b-dropdown-item>
+                        <b-dropdown-item class="backg rout2" v-if="this.$session.exists()" @click="this.logOut">Log out</b-dropdown-item>
+                    </b-nav-item-dropdown>
                     <b-nav-form>
-                        <b-nav-item class="t-shai" active><router-link to="/" class="rout">Home</router-link></b-nav-item>
-                        <b-nav-item class="t-shai" active>
-                            <b-img src="imgs/nav/corazon.png" class="icon"/>
-                        </b-nav-item>
-                        <b-nav-item class="t-shai" active>
-                            <b-img src="imgs/nav/carrito.png" class="icon"/>
-                        </b-nav-item>
-                        <b-nav-item-dropdown>
-                            <template slot="button-content">
-                                <b-img :src=this.$root.credentials[1] class="user"/><a class="decor-a">{{this.$root.credentials[0]}}</a>
-                            </template>
-                            <b-dropdown-item class="backg rout2" v-if="!this.$session.exists()" @click="this.existSession">Log in</b-dropdown-item>
-                            <b-dropdown-item class="backg" v-if="this.$session.exists()"><router-link to="/profile" class="rout2"><b-img :src=this.$root.credentials[1] class="useritem"/><a class="decor-a">Profile</a></router-link></b-dropdown-item>
-                            <b-dropdown-item class="backg rout2" v-if="this.$session.exists()" @click="this.logOut">Log out</b-dropdown-item>
-                        </b-nav-item-dropdown>
                         <b-form-input size="sm" class="mr-sm-2 round" type="text" placeholder="Ex. Jacket" v-model="nameArticle"/>
                         <b-button @click="this.getArcticlebyName" size="sm" class="my-2 my-sm-0 bg-info bt round" type="submit">Search</b-button>
                     </b-nav-form>
@@ -208,6 +208,7 @@ export default {
             this.$session.destroy()
             this.$root.credentials = ['User', 'imgs/nav/user.png']
             this.$forceUpdate()
+            this.$router.push('/')
         },
     }
 }

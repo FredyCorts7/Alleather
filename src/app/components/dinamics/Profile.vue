@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-row align-items-center page">
+    <div class="flex-row align-items-center manageemp">
         <router-view/>
         <input type="checkbox" class="checkbox" id="check">
         <label class="menu" for="check">|||</label>

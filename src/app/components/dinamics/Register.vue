@@ -71,7 +71,7 @@
                   <b-form-input required type="text" class="form-control" placeholder="Ex. Cll 22A #4-55 Ceiba" v-model="person.address"/>
                 </b-input-group>
 
-                <b-button variant="info" block @click="this.registerPerson">Create Account</b-button>
+                <b-button class="colornav" block @click="this.registerPerson">Create Account</b-button>
               </b-form>
             </b-card-body>
           </b-card>
@@ -86,11 +86,11 @@
     font-family: 'varela round';
     color: white;
     box-shadow: 8px 8px 30px rgba(64, 64, 65, 0.8);
-    margin: 100px 0px;
+    margin: 70px 0px;
     padding: 0px
   }
   .reg {
-    width: 85%
+    width: 80%
   }
   #hand, #hand-cursor {
     cursor: pointer;

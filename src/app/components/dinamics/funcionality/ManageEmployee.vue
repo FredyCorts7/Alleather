@@ -1,12 +1,12 @@
 <template>
-  <div class="flex-row align-items-center manageemp">
+  <div class="container-fluid">
     <b-row class="justify-content-md-center">
       <b-button @click="this.showInsert" class="colornav insertemp">Register</b-button>
-      <b-button class="colornav updateemp">Modify</b-button>
+      <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
       <b-button class="colornav deleteemp">Delete</b-button>
       <b-button @click="this.showSelect" class="colornav selectemp">Show</b-button>
     </b-row>
-    <div id="insert" class="container">
+    <div id="insert" class="container"> 
       <b-row class="justify-content-center">
         <b-col>
           <b-card no-body class="bg-dark regis">
@@ -83,9 +83,9 @@
         </b-col>
       </b-row>
     </div>
-    <div id="select" class="justify-content-md-center">
-      <div class="col-md-8">
-        <table class="table table-bordered">
+    <div id="select" class="justify-content-md-center manageemp">
+      <!--<b-table outlined bordered hover :items="employees"></b-table>-->
+        <table class="table table-bordered table-outlined table-striped tabla">
             <thead>
               <tr>
                 <th>Name</th>
@@ -106,13 +106,20 @@
                 <td>{{emp[5]}}</td>
               </tr>
             </tbody>
-          </table>
-        </div>
+        </table>
     </div>
+    <div id="update"></div>
   </div>
 </template>
 
 <style>
+  .manageemp {
+    font-family: 'varela round';
+    margin: 80px 0 30px 0
+  }
+  .tabla {
+    border-radius: 50px;
+  }
   .colornav {
     background-color: #68B0AB;
     border-color: #68B0AB;
@@ -148,6 +155,7 @@ export default {
         address: '',
         rolid: 2
       },
+      tittles: ['Name', 'Sex', 'Email', 'Birthday', 'Image', 'Address', 'Code'],
       employees: [],
       open: true,
       image: null,
@@ -158,6 +166,12 @@ export default {
         {value: 'Indefinido', text: 'Indefinido'}
       ]
     }
+  },
+  created() {
+    if (!this.$session.exists()) {
+      this.$router.push('/')
+      this.$toastr.warning('No tiene el permiso para acceder a éste recurso')
+    } else this.getEmployees()
   },
   methods: {
     validarSoloNumeros: function (evt) {
@@ -201,11 +215,17 @@ export default {
     },
     showInsert () {
       document.getElementById('insert').style.display = 'block'
+      document.getElementById('update').style.display = 'none'
+      document.getElementById('select').style.display = 'none'
+    },
+    showUpdate () {
+      document.getElementById('insert').style.display = 'none'
+      document.getElementById('update').style.display = 'block'
       document.getElementById('select').style.display = 'none'
     },
     showSelect () {
-      this.getEmployees()
       document.getElementById('insert').style.display = 'none'
+      document.getElementById('update').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
     getEmployees: function () {
