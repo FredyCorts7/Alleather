@@ -1,9 +1,11 @@
 <template>
+
   <div class="container-fluid">
+    <h1 class="titulo">Manage Employee</h1>
     <b-row class="justify-content-md-center">
       <b-button @click="this.showInsert" class="colornav insertemp">Register</b-button>
       <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
-      <b-button class="colornav deleteemp">Delete</b-button>
+      <b-button @click="this.showDelete" class="colornav deleteemp">Delete</b-button>
       <b-button @click="this.showSelect" class="colornav selectemp">Show</b-button>
     </b-row>
     <div id="insert" class="container"> 
@@ -85,7 +87,7 @@
     </div>
     <div id="select" class="justify-content-md-center manageemp">
       <!--<b-table outlined bordered hover :items="employees"></b-table>-->
-        <table class="table table-bordered table-outlined table-striped tabla">
+        <table class="table table-bordered table-outlined table-striped tabla table-responsive">
             <thead>
               <tr>
                 <th>Name</th>
@@ -94,6 +96,8 @@
                 <th>Birthday</th>
                 <th>Image</th>
                 <th>Address</th>
+                <th v-if="updateisOpened">Update</th>
+                <th v-if="deleteisOpened">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -104,11 +108,12 @@
                 <td>{{emp[3]}}</td>
                 <td><picture><img class="useritem" :src=emp[4] /></picture></td>
                 <td>{{emp[5]}}</td>
+                <td v-if="updateisOpened"><b-button variant="warning">Update</b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="danger">Delete</b-button></td>
               </tr>
             </tbody>
         </table>
     </div>
-    <div id="update"></div>
   </div>
 </template>
 
@@ -118,7 +123,7 @@
     margin: 80px 0 30px 0
   }
   .tabla {
-    border-radius: 50px;
+    border-radius: 20px;
   }
   .colornav {
     background-color: #68B0AB;
@@ -138,6 +143,12 @@
   #select {
     display: none
   }
+  .titulo{
+    text-align: center; 
+    font-weight: bolder;
+    margin: 40px 0 40px 0;
+  }
+
 </style>
 
 <script>
@@ -164,7 +175,11 @@ export default {
         {value: 'Femenino', text: 'Femenino'},
         {value: 'Masculino', text: 'Masculino'},
         {value: 'Indefinido', text: 'Indefinido'}
-      ]
+      ],
+      insertisOpened: true,
+      selectisOpened: false,
+      updateisOpened: false,
+      deleteisOpened: false
     }
   },
   created() {
@@ -214,18 +229,35 @@ export default {
       } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
     },
     showInsert () {
+      this.insertisOpened = true
+      this.updateisOpened = false
+      this.deleteisOpened = false
+      this.selectisOpened = false
       document.getElementById('insert').style.display = 'block'
-      document.getElementById('update').style.display = 'none'
       document.getElementById('select').style.display = 'none'
     },
     showUpdate () {
+      this.insertisOpened = false
+      this.updateisOpened = true
+      this.deleteisOpened = false
+      this.selectisOpened = false
       document.getElementById('insert').style.display = 'none'
-      document.getElementById('update').style.display = 'block'
-      document.getElementById('select').style.display = 'none'
+      document.getElementById('select').style.display = 'block'
+    },
+    showDelete () {
+      this.insertisOpened = false
+      this.updateisOpened = false
+      this.deleteisOpened = true
+      this.selectisOpened = false
+      document.getElementById('insert').style.display = 'none'
+      document.getElementById('select').style.display = 'block'
     },
     showSelect () {
+      this.insertisOpened = false
+      this.updateisOpened = false
+      this.deleteisOpened = false
+      this.selectisOpened = true
       document.getElementById('insert').style.display = 'none'
-      document.getElementById('update').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
     getEmployees: function () {
