@@ -22,11 +22,11 @@
 				<div class="col-md-4 col-xs-6" v-for="art in this.$root.articles" :key="art">
 					<div class="shop">
 						<div class="shop-img">
-							<img :src=art[3] />
+							<img :src=art[6] />
 						</div>
 						<div class="shop-body">
-							<h3>{{art[0]}}<br>{{art[1]}}</h3>
-							<a class="cta-btn">{{art[2]}}<i class="fa fa-arrow-circle-right"></i></a>
+							<h3>{{art[1]}}<br>{{art[2]}}</h3>
+							<a class="cta-btn">{{art[4]}}<i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 				</div>
@@ -144,12 +144,13 @@ export default {
         onSlideEnd (slide) {
             this.sliding = false
         },
-        getArticles: function () {
+        getArticles () {
             fetch('/api/article')
                 .then(res => res.json())
                 .then(data => {
                     this.$root.articles = data
-            })
+                    console.log(this.$root.articles)
+                })
         }
     }
 }

@@ -1,7 +1,6 @@
 <template>
-
   <div class="container-fluid">
-    <h1 class="titulo">Manage Employee</h1>
+    <h1 class="titulo">Manage Employees</h1>
     <b-row class="justify-content-md-center">
       <b-button @click="this.showInsert" class="colornav insertemp">Register</b-button>
       <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
@@ -95,9 +94,9 @@
                 <th>Email</th>
                 <th>Birthday</th>
                 <th>Image</th>
-                <th>Address</th>
+                <th>Address</th><!--
                 <th v-if="updateisOpened">Update</th>
-                <th v-if="deleteisOpened">Delete</th>
+                <th v-if="deleteisOpened">Delete</th>-->
               </tr>
             </thead>
             <tbody>
@@ -143,7 +142,7 @@
   #select {
     display: none
   }
-  .titulo{
+  .titulo {
     text-align: center; 
     font-weight: bolder;
     margin: 40px 0 40px 0;
@@ -166,9 +165,7 @@ export default {
         address: '',
         rolid: 2
       },
-      tittles: ['Name', 'Sex', 'Email', 'Birthday', 'Image', 'Address', 'Code'],
       employees: [],
-      open: true,
       image: null,
       options: [
         {value: '', text: 'Choose your sex...'},

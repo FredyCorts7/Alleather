@@ -14,6 +14,7 @@ import Register from './components/dinamics/Register.vue'
 import Profile from './components/dinamics/Profile.vue'
 import Index from './components/dinamics/funcionality/Index.vue'
 import ManageEmployee from './components/dinamics/funcionality/ManageEmployee.vue'
+import ManageArticle from './components/dinamics/funcionality/ManageArticle.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
@@ -69,6 +70,11 @@ const router = new Router({
           path: '/profile/manageemployees',
           name: 'ManageEmployee',
           component: ManageEmployee
+        },
+        {
+          path: '/profile/managearticles',
+          name: 'ManageArticles',
+          component: ManageArticle
         }
       ]
     }
