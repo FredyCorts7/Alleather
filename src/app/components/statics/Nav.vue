@@ -164,7 +164,7 @@ export default {
         }
     },
     created () {
-        if (this.$session.exists()) this.$root.credentials = this.$session.get('credent')
+        if (this.$session.exists()) this.$root.credentials = [this.$session.get('credent')[1], this.$session.get('credent')[7]]
     },
     methods: {
         getArcticlebyName () {
@@ -187,13 +187,12 @@ export default {
                 fetch('/api/person/' + this.form.email + '&' + this.form.pass)
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data[0])
                         if (data[0]) {
-                            this.$root.credentials = data[0]
+                            this.$root.credentials = [data[0][1], data[0][7]]
                             this.form.email = ''
                             this.form.pass = ''
                             this.$session.start()
-                            this.$session.set('credent', this.$root.credentials)
+                            this.$session.set('credent', data[0])
                             this.$forceUpdate()
                             this.$toastr.info('Bienvenido ' + this.$root.credentials[0], 'Log in')
                             this.closeModal()

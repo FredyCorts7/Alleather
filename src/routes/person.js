@@ -2,14 +2,11 @@ const express = require('express')
 const router = express.Router()
 const conn = require('../connection/connectOracle')
 
-router.get('/', async (request, response) => {
-    sql = "select per_code, per_name, per_address, per_birthday from person"
-    await conn.open(sql, [], false, response)
-})
-
-router.get('/:user&:pass', async (request, response) => {
-    sql = "select per_name, per_image from person where per_email = :email and per_password = :pass"
-    var email = request.params.user
+router.get('/:email&:pass', async (request, response) => {
+    sql = `select * 
+            from person 
+            where per_email = :email and per_password = :pass`
+    var email = request.params.email
     var pass = request.params.pass
     await conn.open(sql, [email, pass], false, response)
 })

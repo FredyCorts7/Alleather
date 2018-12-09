@@ -94,7 +94,7 @@ export default {
     },
     methods: {
         getFunctionality () {
-            fetch('/api/functionality/')
+            fetch('/api/functionality/' + this.$session.get('credent')[9])
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
