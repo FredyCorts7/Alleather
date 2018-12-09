@@ -88,15 +88,15 @@
       <!--<b-table outlined bordered hover :items="employees"></b-table>-->
         <table class="table table-bordered table-outlined table-striped tabla table-responsive">
             <thead>
-              <tr>
+              <tr class="theader">
                 <th>Name</th>
                 <th>Sex</th>
                 <th>Email</th>
                 <th>Birthday</th>
                 <th>Image</th>
-                <th>Address</th><!--
+                <th>Address</th>
                 <th v-if="updateisOpened">Update</th>
-                <th v-if="deleteisOpened">Delete</th>-->
+                <th v-if="deleteisOpened">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -108,7 +108,7 @@
                 <td><picture><img class="useritem" :src=emp[4] /></picture></td>
                 <td>{{emp[5]}}</td>
                 <td v-if="updateisOpened"><b-button variant="warning">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger">Delete</b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteEmployees(emp[6])">Delete</b-button></td>
               </tr>
             </tbody>
         </table>
@@ -123,6 +123,10 @@
   }
   .tabla {
     border-radius: 20px;
+  }
+  .theader {
+    background-color: rgb(48, 51, 51);
+    color: white;
   }
   .colornav {
     background-color: #68B0AB;
@@ -153,31 +157,31 @@
 <script>
 export default {
     data: function () {
-    return {
-      person: {
-        code: '',
-        name: '',
-        surname: '',
-        sex: '',
-        email: '',
-        pass: '',
-        birth: '',
-        address: '',
-        rolid: 2
-      },
-      employees: [],
-      image: null,
-      options: [
-        {value: '', text: 'Choose your sex...'},
-        {value: 'Femenino', text: 'Femenino'},
-        {value: 'Masculino', text: 'Masculino'},
-        {value: 'Indefinido', text: 'Indefinido'}
-      ],
-      insertisOpened: true,
-      selectisOpened: false,
-      updateisOpened: false,
-      deleteisOpened: false
-    }
+      return {
+        person: {
+          code: '',
+          name: '',
+          surname: '',
+          sex: '',
+          email: '',
+          pass: '',
+          birth: '',
+          address: '',
+          rolid: 2
+        },
+        employees: [],
+        image: null,
+        options: [
+          {value: '', text: 'Choose your sex...'},
+          {value: 'Femenino', text: 'Femenino'},
+          {value: 'Masculino', text: 'Masculino'},
+          {value: 'Indefinido', text: 'Indefinido'}
+        ],
+        insertisOpened: true,
+        selectisOpened: false,
+        updateisOpened: false,
+        deleteisOpened: false
+      }
   },
   created() {
     if (!this.$session.exists()) {
@@ -257,12 +261,25 @@ export default {
       document.getElementById('insert').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
-    getEmployees: function () {
-      fetch('/api/employee/' + this.person.rolid)
+    getEmployees () {
+      fetch('/api/employee/')
         .then(res => res.json())
         .then(data => {
           this.employees = data
           console.log(this.employees)
+        })
+    },
+    deleteEmployees (identify) {
+      fetch('/api/employee/' + identify, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
+        .then(data => {
+          this.getEmployees()
+          this.$toastr.info('Remove succesfully', 'Deleting')
         })
     }
   }

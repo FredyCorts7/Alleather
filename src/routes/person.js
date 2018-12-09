@@ -29,12 +29,4 @@ router.post('/', async (request, response) => {
     await conn.open(sql, [code, name, surname, sex, email, pass, birth, image, address, rolid], true, response)
 })
 
-router.put('/:id', (request, response) => {
-    
-})
-
-router.delete('/:id', (request, response) => {
-
-})
-
 module.exports = router

@@ -9,7 +9,7 @@ cns = {
 function error (err, rs, cn) {
     if (err) {
         console.log(err.message)
-        rs.send({"Error": err})
+        rs.send(JSON.stringify(err))
         if (cn != null) close(cn);
         return -1;
     } else return 0;
@@ -24,13 +24,12 @@ function open (sql, binds, dml, rs) {
                 if (dml)
                     rs.send(JSON.stringify(result.rowAffected))
                 else {
-                    console.log(result.metaData)
                     rs.send(JSON.stringify(result.rows))
                 }
                 close(cn)
             })   
         } catch (error) {
-            rs.send({"Error": error})
+            rs.send(JSON.stringify(err))
         }
     })
 }

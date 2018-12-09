@@ -66,7 +66,7 @@
       <!--<b-table outlined bordered hover :items="employees"></b-table>-->
         <table class="table table-bordered table-outlined table-striped tabla table-responsive">
             <thead>
-              <tr>
+              <tr class="theader">
                 <th>Name</th>
                 <th>Type</th>
                 <th>Material</th>
@@ -74,8 +74,8 @@
                 <th>Price Wholesale</th>
                 <th>Image</th>
                 <th>Quantity</th>
-                <!--<th v-if="updateisOpened">Update</th>
-                <th v-if="deleteisOpened">Delete</th>-->
+                <th v-if="updateisOpened">Update</th>
+                <th v-if="deleteisOpened">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -87,8 +87,8 @@
                 <td>{{art[5]}}</td>
                 <td><picture><img class="useritem" :src=art[6] /></picture></td>
                 <td>{{art[7]}}</td>
-                <td v-if="updateisOpened"><b-button variant="warning">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger">Delete</b-button></td>
+                <td v-if="updateisOpened"><b-button variant="warning" @click="execUpdate(art[0])">Update</b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="danger" @click="execDelete(art[0])">Delete</b-button></td>
               </tr>
             </tbody>
         </table>
@@ -141,7 +141,8 @@ export default {
       insertisOpened: true,
       selectisOpened: false,
       updateisOpened: false,
-      deleteisOpened: false
+      deleteisOpened: false,
+      c: 0
     }
   },
   created() {
@@ -194,12 +195,29 @@ export default {
       document.getElementById('select').style.display = 'block'
     },
     getArticles () {
-      fetch('/api/articles/')
+      fetch('/api/article')
         .then(res => res.json())
         .then(data => {
           this.$root.articles = data
-          console.log(this.$roor.articles)
+          console.log(this.$root.articles)
         })
+    },
+    execUpdate (identify) {
+      this.$toastr.info('Update', 'Function')
+    },
+    execDelete (identify) {
+      fetch('/api/article/' + identify, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        this.getArticles()
+      })
     }
   }
 }
