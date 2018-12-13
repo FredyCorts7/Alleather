@@ -8,7 +8,6 @@ import VueSession from 'vue-session'
 //components
 import App from './App.vue'
 import Main from './components/dinamics/Main.vue'
-import Login from './components/dinamics/Login.vue'
 import Page404 from './components/dinamics/Page404.vue'
 import Register from './components/dinamics/Register.vue'
 import Profile from './components/dinamics/Profile.vue'
@@ -40,12 +39,7 @@ const router = new Router({
     },
     {
       path: '/pages',
-      redirect: '/pages/login'
-    },
-    {
-      path: '/pages/login',
-      name: 'Login',
-      component: Login
+      redirect: '/pages/register'
     },
     {
       path: '/pages/register',

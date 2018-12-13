@@ -6,8 +6,9 @@
       <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
       <b-button @click="this.showDelete" class="colornav deleteemp">Delete</b-button>
       <b-button @click="this.showSelect" class="colornav selectemp">Show</b-button>
+      <b-button @click="this.showHire" class="colornav selectemp">Hire</b-button>
     </b-row>
-    <div id="insert" class="container"> 
+    <div id="insert" class="container">
       <b-row class="justify-content-center">
         <b-col>
           <b-card no-body class="bg-dark regis">
@@ -19,7 +20,7 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Identify code</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="person.code"/>
+                  <b-form-input @keydown.native="validarSoloNumeros" ref="percode" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="person.code"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -77,7 +78,8 @@
                   </b-input-group-prepend>
                   <b-form-input required type="text" class="form-control" placeholder="Ex. Cll 22A #4-55 Ceiba" v-model="person.address"/>
                 </b-input-group>
-                <b-button class="colornav" block @click="this.registerPerson">Create Account</b-button>
+                <b-button v-if="!updateisOpened" class="colornav" block @click="this.registerPerson">Register</b-button>
+                <b-button v-if="updateisOpened" class="colornav" block @click="this.updatePerson">Modify</b-button>
               </b-form>
             </b-card-body>
           </b-card>
@@ -85,7 +87,6 @@
       </b-row>
     </div>
     <div id="select" class="justify-content-md-center manageemp">
-      <!--<b-table outlined bordered hover :items="employees"></b-table>-->
         <table class="table table-bordered table-outlined table-striped tabla table-responsive">
             <thead>
               <tr class="theader">
@@ -97,6 +98,7 @@
                 <th>Address</th>
                 <th v-if="updateisOpened">Update</th>
                 <th v-if="deleteisOpened">Delete</th>
+                <th v-if="hireisOpened">Hire</th>
               </tr>
             </thead>
             <tbody>
@@ -107,8 +109,9 @@
                 <td>{{emp[3]}}</td>
                 <td><picture><img class="useritem" :src=emp[4] /></picture></td>
                 <td>{{emp[5]}}</td>
-                <td v-if="updateisOpened"><b-button variant="warning">Update</b-button></td>
+                <td v-if="updateisOpened"><b-button variant="warning" @click="updateEmployees(emp[6])">Update</b-button></td>
                 <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteEmployees(emp[6])">Delete</b-button></td>
+                <td v-if="hireisOpened"><b-button variant="info" @click="hireEmployees(emp[6])">Hire</b-button></td>
               </tr>
             </tbody>
         </table>
@@ -180,7 +183,8 @@ export default {
         insertisOpened: true,
         selectisOpened: false,
         updateisOpened: false,
-        deleteisOpened: false
+        deleteisOpened: false,
+        hireisOpened: false
       }
   },
   created() {
@@ -203,49 +207,86 @@ export default {
     registerPerson () {
       if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
         this.person.image = this.image.name
-        fetch('/api/person/', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/json'
-          },
-          body: JSON.stringify(this.person)
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+          fetch('/api/person/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.person)
           })
-          .catch(err => {
-            this.$toastr.info('successfully registered', 'Register')
-            this.person.code = ''
-            this.person.name = ''
-            this.person.surname = ''
-            this.person.sex = ''
-            this.person.email = ''
-            this.person.pass = ''
-            this.person.birth = ''
-            this.person.address = ''
-          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully registered', 'Register')
+              this.person.code = ''
+              this.person.name = ''
+              this.person.surname = ''
+              this.person.sex = ''
+              this.person.email = ''
+              this.person.pass = ''
+              this.person.birth = ''
+              this.person.address = ''
+              this.getEmployees()
+            })
       } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
     },
+    updatePerson () {
+      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
+        this.person.image = this.image.name
+          fetch('/api/employee/', {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.person)
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully modify', 'Modify')
+              this.person.code = ''
+              this.person.name = ''
+              this.person.surname = ''
+              this.person.sex = ''
+              this.person.email = ''
+              this.person.pass = ''
+              this.person.birth = ''
+              this.person.address = ''
+              document.getElementById('insert').style.display = 'none'
+              this.getEmployees()
+            })
+        } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
+    },
     showInsert () {
+      this.getEmployees()
       this.insertisOpened = true
       this.updateisOpened = false
       this.deleteisOpened = false
       this.selectisOpened = false
+      this.hireisOpened = false
       document.getElementById('insert').style.display = 'block'
       document.getElementById('select').style.display = 'none'
     },
     showUpdate () {
+      this.getEmployees()
       this.insertisOpened = false
       this.updateisOpened = true
       this.deleteisOpened = false
       this.selectisOpened = false
+      this.hireisOpened = false
       document.getElementById('insert').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
     showDelete () {
+      this.getEmployees()
       this.insertisOpened = false
       this.updateisOpened = false
       this.deleteisOpened = true
@@ -254,10 +295,27 @@ export default {
       document.getElementById('select').style.display = 'block'
     },
     showSelect () {
+      this.getEmployees()
       this.insertisOpened = false
       this.updateisOpened = false
       this.deleteisOpened = false
       this.selectisOpened = true
+      this.hireisOpened = false
+      document.getElementById('insert').style.display = 'none'
+      document.getElementById('select').style.display = 'block'
+    },
+    showHire () {
+      fetch('/api/person/')
+        .then(res => res.json())
+        .then(data => {
+          this.employees = data
+          console.log(this.employees)
+        })
+      this.insertisOpened = false
+      this.updateisOpened = false
+      this.deleteisOpened = false
+      this.selectisOpened = false
+      this.hireisOpened = true
       document.getElementById('insert').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
@@ -267,6 +325,22 @@ export default {
         .then(data => {
           this.employees = data
           console.log(this.employees)
+        })
+    },
+    updateEmployees (identify) {
+      document.getElementById('insert').style.display = 'block'
+      fetch('/api/employee/' + identify)
+        .then(res => res.json())
+        .then(data => {
+          this.person.code = data[0][0]
+          this.person.name = data[0][1]
+          this.person.surname = data[0][2]
+          this.person.sex = data[0][3]
+          this.person.email = data[0][4]
+          //this.person.birth = data[0][5]
+          //this.person.image = data[0][6]
+          this.person.address = data[0][7]
+          this.$toastr.info('Solo puedes modificar lo que se permita', 'Modify')
         })
     },
     deleteEmployees (identify) {
@@ -280,6 +354,19 @@ export default {
         .then(data => {
           this.getEmployees()
           this.$toastr.info('Remove succesfully', 'Deleting')
+        })
+    },
+    hireEmployees (identify) {
+      fetch('/api/employee/' + identify, {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
+        .then(data => {
+          this.showHire()
+          this.$toastr.info('Hire succesfully', 'Hire')
         })
     }
   }
