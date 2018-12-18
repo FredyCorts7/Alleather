@@ -12,7 +12,7 @@ router.get('/', async (request, response) => {
 router.get('/:email&:pass', async (request, response) => {
     sql = `select * 
             from person 
-            where per_email = :email and per_password = :pass`
+            where per_email = :email and decod_pass(per_password) = :pass`
     var email = request.params.email
     var pass = request.params.pass
     await conn.open(sql, [email, pass], false, response)

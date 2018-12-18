@@ -5,8 +5,8 @@
       <b-button @click="this.showInsert" class="colornav insertemp">Register</b-button>
       <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
       <b-button @click="this.showDelete" class="colornav deleteemp">Delete</b-button>
-      <b-button @click="this.showSelect" class="colornav selectemp">Show</b-button>
-      <b-button @click="this.showHire" class="colornav selectemp">Hire</b-button>
+      <b-button @click="this.showSelect" class="colornav selectemp">To List</b-button>
+      <b-button @click="this.showHire" class="colornav selectemp">To Contract</b-button>
     </b-row>
     <div id="insert" class="container">
       <b-row class="justify-content-center">
@@ -291,6 +291,7 @@ export default {
       this.updateisOpened = false
       this.deleteisOpened = true
       this.selectisOpened = false
+      this.hireisOpened = false
       document.getElementById('insert').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },
