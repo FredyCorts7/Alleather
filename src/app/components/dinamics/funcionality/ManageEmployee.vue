@@ -20,7 +20,7 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Identify code</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input @keydown.native="validarSoloNumeros" ref="percode" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="person.code"/>
+                  <b-form-input :disabled=this.toModify @keydown.native="validarSoloNumeros" ref="percode" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="person.code"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -178,7 +178,8 @@ export default {
         selectisOpened: false,
         updateisOpened: false,
         deleteisOpened: false,
-        hireisOpened: false
+        hireisOpened: false,
+        toModify: false
       }
   },
   created() {
@@ -362,6 +363,7 @@ export default {
       fetch('/api/employee/' + identify)
         .then(res => res.json())
         .then(data => {
+          this.toModify = true
           this.person.code = data[0][0]
           this.person.name = data[0][1]
           this.person.surname = data[0][2]

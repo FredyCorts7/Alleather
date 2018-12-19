@@ -19,7 +19,7 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Identify Nit</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input @keydown.native="validarSoloNumeros" ref="percode" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="provider.nit"/>
+                  <b-form-input :disabled=this.toModify @keydown.native="validarSoloNumeros" ref="percode" required type="text" class="form-control" placeholder="Ex. 1090123861" v-model="provider.nit"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -121,7 +121,8 @@ export default {
         insertisOpened: true,
         selectisOpened: false,
         updateisOpened: false,
-        deleteisOpened: false        
+        deleteisOpened: false,
+        toModify: false     
       }
   },
   created() {
@@ -243,6 +244,7 @@ export default {
       fetch('/api/provider/' + nit)
         .then(res => res.json())
         .then(data => {
+          this.toModify = true
           this.provider.nit = data[0][0]
           this.provider.name = data[0][1]
           this.provider.email = data[0][2]

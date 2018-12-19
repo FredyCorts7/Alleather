@@ -4,16 +4,17 @@ const conn = require('../connection/connectOracle')
 
 router.get('/', async (request, response) => {
     sql = `select a.art_id, a.art_name, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image
-    from stock s, article a, size_art sa
-    where s.art_id = a.art_id and sa.size_id = s.size_id
-    group by (a.art_id, a.art_name, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
+            from stock s, article a, size_art sa
+            where s.art_id = a.art_id and sa.size_id = s.size_id
+            group by (a.art_id, a.art_name, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
     await conn.open(sql, [], false, response)
 })
 
 router.get('/:name', async (request, response) => {
-    sql = `select a.art_id, a.art_name, a.art_type, a.art_mat, a.art_price_unit, a.art_price_wholesale, a.art_image 
-            from article a 
-            where lower(a.art_name) like lower('` + request.params.name + `%')`
+    sql = `select a.art_id, a.art_name, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image
+    from stock s, article a, size_art sa
+    where s.art_id = a.art_id and sa.size_id = s.size_id and lower(a.art_name) like lower('` + request.params.name + `%')
+    group by (a.art_id, a.art_name, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
     await conn.open(sql, [], false, response)
 })
 

@@ -11,10 +11,11 @@
                 @sliding-end="onSlideEnd">
             <!-- Slides with custom text -->
             <b-carousel-slide img-src="imgs/background/back2.jpg">
-                <h1>Hello world!</h1>
+                <h1>You choose the best option!</h1>
             </b-carousel-slide>
             <!-- Slides with image only -->
             <b-carousel-slide img-src="imgs/background/back1.jpg">
+                <h1>Your security for us counts!</h1>
             </b-carousel-slide>
         </b-carousel>
         <div class="container tarjeta">
@@ -132,6 +133,9 @@
     .shop .shop-body .cta-btn {
         color: #FFF;
         text-transform: uppercase;
+    }
+    h1 {
+        text-shadow: 6px 6px 10px rgb(18, 19, 19);
     }
 </style>
 
