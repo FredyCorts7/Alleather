@@ -17,16 +17,15 @@
             <b-carousel-slide img-src="imgs/background/back1.jpg">
             </b-carousel-slide>
         </b-carousel>
-        <div class="container">
+        <div class="container tarjeta">
 			<div class="row">
 				<div class="col-md-4 col-xs-6" v-for="art in this.$root.articles" :key="art">
 					<div class="shop">
 						<div class="shop-img">
-							<img :src=art[6] />
+							<img :src=art[7] />
 						</div>
 						<div class="shop-body">
-							<h3>{{art[1]}}<br>{{art[2]}}</h3>
-							<a class="cta-btn">{{art[4]}}<i class="fa fa-arrow-circle-right"></i></a>
+							<h3 class="tarjeta">{{art[1]}}<br>{{art[2]}}<br>{{art[4]}}<br>{{art[5]}}</h3>
 						</div>
 					</div>
 				</div>
@@ -40,17 +39,25 @@
     .cont {
         margin-top: 50px
     }
-    .shop {
+    .tarjeta {
         font-family: 'varela round';
+        font-size: 22px;
+        color: white !important;
+    }
+    .shop {
         position: relative;
         overflow: hidden;
         margin: 15px 0px;
         border-radius: 14px;
-        height: 350px;
-        box-shadow: 6px 6px 25px rgba(64, 64, 65, 0.8)
+        height: 300px;
+        box-shadow: 6px 6px 25px rgba(64, 64, 65, 0.8);
+        z-index: 0;
+        font-size: 10px;
+        color: rgb(72, 75, 75);
     }
-
     .shop::before {
+        font-size: 10px;
+        color: rgb(72, 75, 75);
         content: "";
         position: absolute;
         top: 0;
@@ -69,6 +76,8 @@
     }
 
     .shop::after {
+        font-size: 10px;
+        color: rgb(72, 75, 75);
         content: "";
         position: absolute;
         top: 0;

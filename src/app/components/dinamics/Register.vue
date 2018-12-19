@@ -133,33 +133,61 @@ export default {
       }
     },
     registerPerson () {
-      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
-        this.person.image = this.image.name
-        fetch('/api/person/', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/json'
-          },
-          body: JSON.stringify(this.person)
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.pass != '' && this.person.birth != '' && this.person.address != '') {
+        if (this.person.image == undefined) {
+          fetch('/api/person/' + 0, { //0--> la inserción no necesita imagen
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.person)
           })
-          .catch(err => {
-            this.$toastr.info('successfully registered', 'Register')
-            this.person.code = ''
-            this.person.name = ''
-            this.person.surname = ''
-            this.person.sex = ''
-            this.person.email = ''
-            this.person.pass = ''
-            this.person.birth = ''
-            this.person.address = ''
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully registered', 'Register')
+              this.person.name = ''
+              this.person.surname = ''
+              this.person.sex = ''
+              this.person.email = ''
+              this.person.pass = ''
+              this.person.birth = ''
+              this.person.address = ''
+              this.person.code = ''
+            })
+        } else {
+          this.person.image = this.image.name
+          fetch('/api/person/' + 1, { //1-->La inserción necesita imagen
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.person)
           })
-      } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully registered', 'Register')
+              this.person.name = ''
+              this.person.surname = ''
+              this.person.sex = ''
+              this.person.email = ''
+              this.person.pass = ''
+              this.person.birth = ''
+              this.person.address = ''
+              this.person.code = ''
+            })
+        }
+      }
+      else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
     }
   }
 }

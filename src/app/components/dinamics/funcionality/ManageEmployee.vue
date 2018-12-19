@@ -140,13 +140,7 @@
     background-color: rgb(88, 148, 144);
     border-color: rgb(88, 148, 144)
   }
-  #update {
-    display: none
-  }
-  #delete {
-    display: none
-  }
-  #select {
+  .select {
     display: none
   }
   .titulo {
@@ -206,8 +200,8 @@ export default {
     },
     registerPerson () {
       if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
-        this.person.image = this.image.name
-          fetch('/api/person/', {
+        if (this.person.image == undefined) {
+          fetch('/api/person/' + 0, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -232,10 +226,39 @@ export default {
               this.person.address = ''
               this.getEmployees()
             })
+        } else {
+          this.person.image = this.image.name
+          fetch('/api/person/' + 1, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.person)
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully registered', 'Register')
+              this.person.code = ''
+              this.person.name = ''
+              this.person.surname = ''
+              this.person.sex = ''
+              this.person.email = ''
+              this.person.pass = ''
+              this.person.birth = ''
+              this.person.address = ''
+              this.person.image = undefined
+              this.getEmployees()
+            })
+        }
       } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
     },
     updatePerson () {
-      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
+      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.address != '') {
         this.person.image = this.image.name
           fetch('/api/employee/', {
             method: 'PUT',
@@ -248,7 +271,7 @@ export default {
             .then(res => res.json())
             .then(data => {
               console.log(data)
-              if (data.Error) this.$toastr.warning('Puede que éste email o código de identificación ya estén siendo utilizados', 'Register')
+              if (data.Error) this.$toastr.warning('Puede que éste email ya esté siendo utilizado', 'Modify')
             })
             .catch(err => {
               this.$toastr.info('successfully modify', 'Modify')
@@ -306,7 +329,13 @@ export default {
       document.getElementById('select').style.display = 'block'
     },
     showHire () {
-      fetch('/api/person/')
+      fetch('/api/person/', {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
         .then(res => res.json())
         .then(data => {
           this.employees = data
@@ -341,7 +370,7 @@ export default {
           //this.person.birth = data[0][5]
           //this.person.image = data[0][6]
           this.person.address = data[0][7]
-          this.$toastr.info('Solo puedes modificar lo que se permita', 'Modify')
+          this.$toastr.info('Solo puedes modificar lo que se te permita', 'Modify')
         })
     },
     deleteEmployees (identify) {

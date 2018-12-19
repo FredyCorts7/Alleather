@@ -14,6 +14,9 @@ import Profile from './components/dinamics/Profile.vue'
 import Index from './components/dinamics/funcionality/Index.vue'
 import ManageEmployee from './components/dinamics/funcionality/ManageEmployee.vue'
 import ManageArticle from './components/dinamics/funcionality/ManageArticle.vue'
+import ModifyData from './components/dinamics/funcionality/ModifyData.vue'
+import ListClient from './components/dinamics/funcionality/ListClient.vue'
+import ManageProvider from './components/dinamics/funcionality/ManageProvider.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
@@ -69,7 +72,22 @@ const router = new Router({
           path: '/profile/managearticles',
           name: 'ManageArticles',
           component: ManageArticle
-        }
+        },
+        {
+          path: '/profile/modifydata',
+          name: 'Modify Data',
+          component: ModifyData
+        },
+        {
+          path: '/profile/listclient',
+          name: 'List Client',
+          component: ListClient
+        },
+        {
+          path: '/profile/manageprovider',
+          name: 'Manage Provider',
+          component: ManageProvider
+        },
       ]
     }
   ]
