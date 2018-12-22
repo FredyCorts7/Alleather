@@ -96,9 +96,6 @@
     background-color: rgb(88, 148, 144);
     border-color: rgb(88, 148, 144)
   }
-  .selectpro {
-    display: none
-  }
   .titulo {
     text-align: center; 
     font-weight: bolder;

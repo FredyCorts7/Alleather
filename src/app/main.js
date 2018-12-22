@@ -70,7 +70,7 @@ const router = new Router({
         },
         {
           path: '/profile/managearticles',
-          name: 'ManageArticles',
+          name: 'Manage Articles',
           component: ManageArticle
         },
         {

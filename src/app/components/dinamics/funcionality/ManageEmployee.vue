@@ -140,7 +140,7 @@
     background-color: rgb(88, 148, 144);
     border-color: rgb(88, 148, 144)
   }
-  .select {
+  #select {
     display: none
   }
   .titulo {
