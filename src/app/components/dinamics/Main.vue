@@ -32,11 +32,26 @@
 				</div>
 			</div>
 		</div>
+        <div class="flex-row align-items-center page noart" v-if="this.$root.articles.length == 0">
+            <div class="container">
+                <b-row class="justify-content-center">
+                    <b-col md="6">
+                        <div class="clearfix">
+                            <h2 class="float-left display-4 pt-3">Oops! We're sorry.</h2>
+                            <h3 class="text-muted">No articles found for the moment.</h3>
+                        </div>
+                    </b-col>
+                </b-row>
+            </div>
+        </div>
         <router-view/>
     </div>
 </template>
 
 <style>
+    .noart {
+        margin: 10px !important
+    }
     .cont {
         margin-top: 50px
     }

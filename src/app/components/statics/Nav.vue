@@ -165,6 +165,13 @@ export default {
     },
     created () {
         if (this.$session.exists()) this.$root.credentials = [this.$session.get('credent')[1], this.$session.get('credent')[7]]
+        this.debouncedGetArticlebyName = _.debounce(this.getArcticlebyName(), 800)
+    },
+    watch: {
+        nameArticle: function (newName, oldName) {
+            this.getArcticlebyName()
+            this.debouncedGetArticlebyName()
+        }
     },
     methods: {
         getArcticlebyName () {
@@ -173,7 +180,6 @@ export default {
                 .then(res => res.json())
                 .then(data => {
                     this.$root.articles = data
-                    this.nameArticle = ''
             })
         },
         existSession () {
