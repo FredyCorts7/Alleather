@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../connection/connectOracle')
+//const mail = require(`C:/Users/richa/Documents/VueProjects/alleather/src/connection`)
 
 router.get('/', async (request, response) => {
     sql = `select a.art_id, a.art_name, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image

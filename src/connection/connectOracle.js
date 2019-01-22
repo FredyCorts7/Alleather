@@ -42,4 +42,4 @@ function close (cn) {
     );
 }
 
-exports.open = open;
+exports.open = open
