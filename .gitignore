@@ -1,3 +1,4 @@
 node_modules
 package-lock.json
 src/connection/connectOracle.js
+src/public/js/bundle.js
