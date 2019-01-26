@@ -88,7 +88,7 @@
                             <b-input-group-prepend>
                             <b-input-group-text>Telefono Fijo</b-input-group-text>
                             </b-input-group-prepend>
-                            <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 5712334" v-model="person.telfij"/>
+                            <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 5712334" v-model="telfij"/>
                         </b-input-group>
 
                         <b-button v-if="this.showModify" class="colornav" block @click="this.modifyPerson">Modify Data</b-button>
@@ -194,8 +194,11 @@ export default {
             document.getElementById('select').style.display = 'block'
         },
         addPhones () {
+            console.log("entro al metodo")
+            console.log("telefono fijo"+this.telfij)
+            console.log("telefono celular"+this.telcel)
             if (this.telcel != '') {
-                fetch('/api/phone_per/' + this.$session.get('credent')[0] + '&' + this.telcel + '&' + 0, {
+                fetch('/api/phone_per/' + this.$session.get('credent')[0] + '&' + this.telcel + '&' + 0, { // metodo para agregar telefonos celulares tipo 0 "0"
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -209,7 +212,7 @@ export default {
                     })
             }
             if (this.telfij != '') {
-                fetch('/api/phone_per/' + this.$session.get('credent')[0] + '&' + this.telfij + '&' + 1, {
+                fetch('/api/phone_per/' + this.$session.get('credent')[0] + '&' + this.telfij + '&' + 1, { //metodo para agregar telefonos fijos tipo 1
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
