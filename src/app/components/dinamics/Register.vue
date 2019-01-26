@@ -134,8 +134,9 @@ export default {
     },
     registerPerson () {
       if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.pass != '' && this.person.birth != '' && this.person.address != '') {
-        if (this.person.image == undefined) {
-          fetch('/api/person/' + 0, { //0--> la inserción no necesita imagen
+        if (this.image) {
+          this.person.image = this.image.name
+          fetch('/api/person/' + 1, { //1-->La inserción necesita imagen
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -160,8 +161,7 @@ export default {
               this.person.code = ''
             })
         } else {
-          this.person.image = this.image.name
-          fetch('/api/person/' + 1, { //1-->La inserción necesita imagen
+          fetch('/api/person/' + 0, { //0--> la inserción no necesita imagen
             method: 'POST',
             headers: {
               'Accept': 'application/json',
