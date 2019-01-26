@@ -134,6 +134,9 @@ export default {
     },
     registerPerson () {
       if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.pass != '' && this.person.birth != '' && this.person.address != '') {
+        /*La insercion se maneja de dos formas ya que es opcional registrarse con una imagen de perfil o no agregar imagen,
+        por lo tanto debemos manejar estas dos opciones el this.image en la condicion me permite saber si ese atributo o variable
+        tiene una valor(si es diferente de null o undefined)*/
         if (this.image) {
           this.person.image = this.image.name
           fetch('/api/person/' + 1, { //1-->La inserción necesita imagen
