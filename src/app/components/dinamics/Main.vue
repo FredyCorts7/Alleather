@@ -179,6 +179,9 @@ export default {
                     this.$root.articles = data
                     console.log(this.$root.articles)
                 })
+                .catch(err=>{
+                    this.$toastr.info('successfully registred','Registrer')
+                })
         }
     }
 }
