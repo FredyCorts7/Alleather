@@ -162,6 +162,7 @@ export default {
               this.person.birth = ''
               this.person.address = ''
               this.person.code = ''
+              this.$router.push('/')
             })
         } else {
           fetch('/api/person/' + 0, { //0--> la inserción no necesita imagen
@@ -187,6 +188,7 @@ export default {
               this.person.birth = ''
               this.person.address = ''
               this.person.code = ''
+              this.$router.push('/')
             })
         }
       }

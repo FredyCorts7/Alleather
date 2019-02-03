@@ -3,23 +3,23 @@ var oracle = require('oracledb')
 cns = {
     user: "ALLEATHER",
     password: "klmf",
-    connectString: "localhost/XE"
+    connectString: "localhost/XE",
 };
 
-function error (err, rs, cn) {
+//row functions
+let error = (err, rs, cn) => {
     if (err) {
-        console.log(err.message)
         rs.send(JSON.stringify(err))
-        if (cn != null) close(cn);
-        return -1;
-    } else return 0;
+        if (!cn) close(cn)
+        return -1
+    }
 }
 
-function open (sql, binds, dml, rs) {
-    oracle.getConnection(cns, function(err, cn) {
+let open = (sql, binds, dml, rs) => {
+    oracle.getConnection(cns, (err, cn) => {
         if (error(err, rs, null) == -1) return;
         try {
-            cn.execute(sql, binds, {autoCommit: dml}, function(err, result) {
+            cn.execute(sql, binds, { autoCommit: dml }, (err, result) => {
                 if (error(err, rs, cn) == -1) return;
                 if (dml)
                     rs.send(JSON.stringify(result.rowAffected))
@@ -27,19 +27,17 @@ function open (sql, binds, dml, rs) {
                     rs.send(JSON.stringify(result.rows))
                 }
                 close(cn)
-            })   
-        } catch (error) {
+            })
+        } catch (err) {
             rs.send(JSON.stringify(err))
         }
     })
 }
 
-function close (cn) {
-    cn.release(
-        function (err) {
-            if (err) console.log(err.message)
-        }
-    );
+let close = cn => {
+    cn.release(err => {
+        if (err) console.log(err.message)
+    })
 }
 
 exports.open = open

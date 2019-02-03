@@ -179,8 +179,9 @@ export default {
                     this.$root.articles = data
                     console.log(this.$root.articles)
                 })
-                .catch(err=>{
-                    this.$toastr.info('successfully registred','Registrer')
+
+                .catch(err => {
+                    this.$toastr('No se pudo conectar a la db!')
                 })
         }
     }
