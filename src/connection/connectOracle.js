@@ -1,7 +1,7 @@
 var oracle = require('oracledb')
 
 cns = {
-    user: "ALL_LEATHER",
+    user: "ALLEATHER",
     password: "klmf",
     connectString: "localhost/XE"
 };

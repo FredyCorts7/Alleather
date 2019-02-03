@@ -207,16 +207,16 @@ export default {
     },
     execDelete (identify) {
       fetch('/api/article/' + identify, {
-        method: 'DELETE',
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-type': 'application/json'
         }
       })
-      .then(res => res.json())
-      .then(data => {
+        .then(data => {
         console.log(data)
         this.getArticles()
+        this.$toastr.info('Remove Succesfully', 'Deleting')
       })
     }
   }

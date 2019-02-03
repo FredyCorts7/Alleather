@@ -19,8 +19,8 @@ router.get('/:name', async (request, response) => {
     await conn.open(sql, [], false, response)
 })
 
-router.delete('/:id', async (request, response) => {
-    sql = `delete from article where art_id = ` + request.params.id
+router.put('/:id', async (request, response) => {
+    sql = `update article article set art_active = 0 where art_id = ` + request.params.id
     await conn.open(sql, [], true, response)
 })
 
