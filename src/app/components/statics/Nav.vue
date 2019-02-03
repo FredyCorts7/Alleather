@@ -51,12 +51,20 @@
                                     label="Password:"
                                     label-for="exampleInput2">
                         <b-form-input id="exampleInput2"
+                                    ref="passfield"
                                     type="password"
                                     v-model="form.pass"
                                     required
                                     placeholder="Enter password">
                         </b-form-input>
                     </b-form-group>
+                    <b-form-checkbox-group id="exampleInputGroup3"
+                                    ref="checkfield"
+                                    class="marginbottom"
+                                    v-model="showPass" 
+                                    @change="this.showPassword">
+                        <b-form-checkbox value="show">Show Password</b-form-checkbox>
+                    </b-form-checkbox-group>
                     <b-button block @click="this.logIn" variant="info" class="marginbott">Log in</b-button>
                     <b-form-text>You have not yet registered? Do it now.</b-form-text>
                     <router-link to="/pages/register" class="rout"><b-button block variant="info" @click="this.closeModal" class="marginbott">Register</b-button></router-link>
@@ -154,6 +162,7 @@ export default {
             },
             nameArticle: '',
             show: true,
+            showPass: [],
             headerBgVariant: 'dark',
             headerBorVariant: 'dark',
             headerTextVariant: 'light',
@@ -215,6 +224,14 @@ export default {
             this.$forceUpdate()
             this.$router.push('/')
         },
+        showPassword () {
+            console.log(this.showPass[0])
+            if (this.showPass[0] == "show") {
+                this.$refs.passfield.setAttribute("type", "password")
+            } else {
+                this.$refs.passfield.setAttribute("type", "text")
+            }
+        }
     }
 }
 </script>
