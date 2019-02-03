@@ -99,6 +99,7 @@ new Vue({
   router,
   data: function () {
     return {
+      //Podemos acceder a los siguientes atributos desde otro componente vue utilizando el this.$root
       credentials: [
         'User',
         'imgs/nav/user.png'
