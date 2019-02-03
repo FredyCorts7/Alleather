@@ -189,15 +189,13 @@ export default {
     } else this.getEmployees()
   },
   methods: {
-    validarSoloNumeros: function (evt) {
+    validarSoloNumeros(evt) {
       if(parseInt(evt.key) + '' === 'NaN'
           && evt.which !== 8 
           && evt.which !== 9
           && evt.which !== 190 
           && evt.which !== 37 
-          && evt.which !== 39) {
-        evt.preventDefault()
-      }
+          && evt.which !== 39) evt.preventDefault()
     },
     registerPerson () {
       if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {

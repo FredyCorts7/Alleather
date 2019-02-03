@@ -14,20 +14,18 @@
             <b-card-body class="p-4">
               <b-form>
                 <h1>Register Articles</h1>
-                <p class="text-muted">Register Articles</p>
-
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Identify code</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. George" v-model="article.id"/>
+                  <b-form-input :disabled=this.toModify @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 00000001" v-model="article.id"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Name</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. Cortés" v-model="article.name"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. Chaqueta" v-model="article.name"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -41,21 +39,22 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Material</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. example@gmail.com" v-model="article.material"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. Cuero Italiano" v-model="article.material"/>
                 </b-input-group>
                  <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price Unit</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. example@gmail.com" v-model="article.priceunit"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. 99999" v-model="article.priceunit"/>
                 </b-input-group>
                  <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price Wholesale</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. example@gmail.com" v-model="article.pricewholesale"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. 99998" v-model="article.pricewholesale"/>
                 </b-input-group>
-                <b-button class="colornav" block @click="this.registerPerson">Create Account</b-button>
+                <b-button v-if="!updateisOpened" class="colornav" block @click="this.registerArticle">Add Article</b-button>
+                <b-button v-if="updateisOpened" class="colornav" block @click="this.updateArticles">Modify Article</b-button>
               </b-form>
             </b-card-body>
           </b-card>
@@ -73,7 +72,6 @@
                 <th>Price Unit</th>
                 <th>Price Wholesale</th>
                 <th>Image</th>
-                <th>Quantity</th>
                 <th v-if="updateisOpened">Update</th>
                 <th v-if="deleteisOpened">Delete</th>
               </tr>
@@ -83,12 +81,11 @@
                 <td>{{art[1]}}</td>
                 <td>{{art[2]}}</td>
                 <td>{{art[3]}}</td>
-                <td>{{art[4]}}</td>
                 <td>{{art[5]}}</td>
-                <td><picture><img class="useritem" :src=art[6] /></picture></td>
-                <td>{{art[7]}}</td>
-                <td v-if="updateisOpened"><b-button variant="warning" @click="execUpdate(art[0])">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger" @click="execDelete(art[0])">Delete</b-button></td>
+                <td>{{art[6]}}</td>
+                <td><picture><img class="useritem" :src=art[7] /></picture></td>
+                <td v-if="updateisOpened"><b-button variant="warning" @click="toUpdateArticles(art[0])">Update</b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteArticles(art[0])">Delete</b-button></td>
               </tr>
             </tbody>
         </table>
@@ -137,12 +134,17 @@ export default {
         pricewholesale: ''
       },
       image: null,
-      options: [],
+      options: [
+        {value: '', text: 'Choose type...'},
+        {value: 'Femenino', text: 'Femenino'},
+        {value: 'Masculino', text: 'Masculino'},
+        {value: 'Unisex', text: 'Unisex'}
+      ],
       insertisOpened: true,
       selectisOpened: false,
       updateisOpened: false,
       deleteisOpened: false,
-      c: 0
+      toModify: false
     }
   },
   created() {
@@ -152,15 +154,13 @@ export default {
     } else this.getArticles()
   },
   methods: {
-    validarSoloNumeros: function (evt) {
+    validarSoloNumeros (evt) {
       if(parseInt(evt.key) + '' === 'NaN'
           && evt.which !== 8 
           && evt.which !== 9
           && evt.which !== 190 
           && evt.which !== 37 
-          && evt.which !== 39) {
-        evt.preventDefault()
-      }
+          && evt.which !== 39) evt.preventDefault()
     },
     showInsert () {
       this.insertisOpened = true
@@ -197,28 +197,67 @@ export default {
     getArticles () {
       fetch('/api/article')
         .then(res => res.json())
-        .then(data => {
-          this.$root.articles = data
-          console.log(this.$root.articles)
+        .then(data => this.$root.articles = data)
+    },
+    updateArticles (identify) {
+      if (this.article.id != '' && this.article.name != '' && this.article.type != '' && this.article.material != '' && this.article.priceunit != '' && this.article.pricewholesale != '') {
+        fetch('/api/article/', {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify(this.article)
         })
+          .then(res => res.json())
+          .then(data => {
+            this.$toastr.success('Se ha actualizado satisfactoriamente', 'Updating...')
+            this.article.id = ''
+            this.article.name = ''
+            this.article.type = ''
+            this.article.material = ''
+            this.article.priceunit = ''
+            this.article.pricewholesale = ''
+            document.getElementById('insert').style.display = 'none'
+            this.getArticles()
+          })
+      } else this.$toastr.warning('Debes suministrar todos los datos', 'Updating...')
     },
-    execUpdate (identify) {
-      this.$toastr.info('Update', 'Function')
-    },
-    execDelete (identify) {
+    deleteArticles (identify) {
       fetch('/api/article/' + identify, {
-        method: 'DELETE',
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-type': 'application/json'
         }
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        this.getArticles()
+        .then(data => {
+          this.getArticles()
+          this.$toastr.success('Se ha eliminado satisfactoriamente', 'Deleting...')
+        })
+    },
+    toUpdateArticles (identify) {
+      document.getElementById('insert').style.display = 'block'
+      fetch('/api/article/' + identify, {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
       })
-    }
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          this.toModify = true
+          this.article.id = data[0][0]
+          this.article.name = data[0][1]
+          this.article.type = data[0][2]
+          this.article.material = data[0][3]
+          this.article.priceunit = data[0][5]
+          this.article.pricewholesale = data[0][6]
+          this.$toastr.info('Solo puedes modificar lo que se permita', 'Modify')
+        })
+    },
   }
 }
 </script>
