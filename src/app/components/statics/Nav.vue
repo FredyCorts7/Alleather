@@ -1,4 +1,5 @@
 <template>
+
     <b-container>
         <b-navbar id="nav" toggleable="md" type="dark" fixed="top">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -75,81 +76,81 @@
 </template>
 
 <style>
-    #nav {
-        background-color: #68B0AB;
-        font-family: 'varela round';
-        box-shadow: 0px 5px 20px rgba(64, 64, 65, 0.5);
-        height: 50px
-    }
-    #login {
-        font-family: 'varela round'
-    }
-    .backg:hover {
-        background-color: rgba(64, 64, 65, 0.9)
-    }
-    .marginbott {
-        margin-bottom: 5px;
-    }
-    .marginbottom {
-        margin-bottom: 35px
-    }
-    .container {
-        width: 80%
-    }
-    .titlenav {
-        font-weight: bolder
-    }
-    .round {
-        border: none;
-        border-radius: 20px
-    }
-    .t-shai:hover {
-        text-shadow: 3px 3px 10px rgba(64, 64, 65, 0.5)
-    }
-    .t-shai {
-        margin: 0px
-    }
-    .icon {
-        width: 25px;
-        height: 25px
-    }
-    .logo {
-        width: 55px;
-        height: 50px;
-        margin: 5px
-    }
-    .icon:hover {
-        background-color: rgb(83, 141, 137);
-        border-radius: 20px;
-        padding: 2px
-    }
-    .rout {
-        color: white;
-    }
-    .rout2 {
-        color: black;
-    }
-    .rout2:hover {
-        text-decoration: none;
-        color: white
-    }
-    .rout:hover {
-        text-decoration: none;
-        color: white
-    }
-    .user {
-        border-radius: 20px;
-        width: 21px;
-        height: 25px
-    }
-    .useritem {
-        border-radius: 30px;
-        width: 46px;
-        height: 50px
-    }
-    .decor-a {
-        margin: 0px 3px
-    }
+#nav {
+  background-color: #68b0ab;
+  font-family: "varela round";
+  box-shadow: 0px 5px 20px rgba(64, 64, 65, 0.5);
+  height: 50px;
+}
+#login {
+  font-family: "varela round";
+}
+.backg:hover {
+  background-color: rgba(64, 64, 65, 0.9);
+}
+.marginbott {
+  margin-bottom: 5px;
+}
+.marginbottom {
+  margin-bottom: 35px;
+}
+.container {
+  width: 80%;
+}
+.titlenav {
+  font-weight: bolder;
+}
+.round {
+  border: none;
+  border-radius: 20px;
+}
+.t-shai:hover {
+  text-shadow: 3px 3px 10px rgba(64, 64, 65, 0.5);
+}
+.t-shai {
+  margin: 0px;
+}
+.icon {
+  width: 25px;
+  height: 25px;
+}
+.logo {
+  width: 55px;
+  height: 50px;
+  margin: 5px;
+}
+.icon:hover {
+  background-color: rgb(83, 141, 137);
+  border-radius: 20px;
+  padding: 2px;
+}
+.rout {
+  color: white;
+}
+.rout2 {
+  color: black;
+}
+.rout2:hover {
+  text-decoration: none;
+  color: white;
+}
+.rout:hover {
+  text-decoration: none;
+  color: white;
+}
+.user {
+  border-radius: 20px;
+  width: 21px;
+  height: 25px;
+}
+.useritem {
+  border-radius: 30px;
+  width: 46px;
+  height: 50px;
+}
+.decor-a {
+  margin: 0px 3px;
+}
 </style>
 
 <script>
@@ -171,16 +172,12 @@ export default {
             footerBgVariant: 'light',
             footerTextVariant: 'dark'
         }
+      },
+    existSession() {
+      if (!this.$session.exists()) this.$refs.modalogin.show();
     },
-    created () {
-        if (this.$session.exists()) this.$root.credentials = [this.$session.get('credent')[1], this.$session.get('credent')[7]]
-        this.debouncedGetArticlebyName = _.debounce(this.getArcticlebyName(), 800)
-    },
-    watch: {
-        nameArticle: function (newName, oldName) {
-            this.getArcticlebyName()
-            this.debouncedGetArticlebyName()
-        }
+    closeModal() {
+      this.$refs.modalogin.hide();
     },
     methods: {
         getArcticlebyName () {
@@ -233,5 +230,6 @@ export default {
             }
         }
     }
-}
+  }
+;
 </script>
