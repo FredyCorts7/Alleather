@@ -1,5 +1,4 @@
 <template>
-
     <b-container>
         <b-navbar id="nav" toggleable="md" type="dark" fixed="top">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>

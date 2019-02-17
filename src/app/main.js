@@ -20,7 +20,7 @@ import ManageProvider from './components/dinamics/funcionality/ManageProvider.vu
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
-Vue.use(VueSession, {persist: true})
+Vue.use(VueSession)
 window.toastr = require('toastr')
 Vue.use(VueToastr2)
 

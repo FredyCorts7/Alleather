@@ -109,9 +109,9 @@
                 <td>{{emp[3]}}</td>
                 <td><picture><img class="useritem" :src=emp[4] /></picture></td>
                 <td>{{emp[5]}}</td>
-                <td v-if="updateisOpened"><b-button variant="warning" @click="updateEmployees(emp[6])">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteEmployees(emp[6])">Delete</b-button></td>
-                <td v-if="hireisOpened"><b-button variant="info" @click="hireEmployees(emp[6])">Hire</b-button></td>
+                <td v-if="updateisOpened"><b-button variant="info" @click="updateEmployees(emp[6])"><img class="iconsown" src="imgs/icons/editdata.png"></b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="info" @click="deleteEmployees(emp[6])"><img class="iconsown" src="imgs/icons/delete.png"></b-button></td>
+                <td v-if="hireisOpened"><b-button variant="info" @click="hireEmployees(emp[6])"><img class="iconsown" src="imgs/icons/hire.png"></b-button></td>
               </tr>
             </tbody>
         </table>
