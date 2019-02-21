@@ -18,7 +18,7 @@ router.get('/:name', async (request, response) => {
     group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
     await conn.open(sql, [], false, response)
 })
-
+/*
 router.patch('/:id', async (req, res) => { //tomaremos éste patch como nuestro metodo get de http
     sql = `select a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image
     from stock s, article a, size_art sa
@@ -26,11 +26,22 @@ router.patch('/:id', async (req, res) => { //tomaremos éste patch como nuestro 
     group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
     let id = req.params.id
     await conn.open(sql, [id], false, res)
-})
+})*/
 
 router.post('/', async (req, res) => {
-    sql = ``
-    await conn.open(sql, [], true, res)
+    sql = `insert into article
+    values (:id,:name,:type,:categorie,:material,:priceunit,:pricewholesale,:descrip,:quantmin,0)`
+    let id= parseInt(req.body.id)
+    let name=req.body.name
+    let type=req.body.type
+    let categorie=parseInt(req.body.categorie)
+    let material=req.body.material
+    let priceunit=parseInt(req.body.priceunit)
+    let pricewholesale=parseInt(req.body.pricewholesale)
+    let descrip= req.body.descrip
+    let quantmin=parseInt(req.body.quantmin)
+
+    await conn.open(sql, [id,name,type,categorie,material,priceunit,pricewholesale,descrip,quantmin], true, res)
 })
 
 router.put('/:id', async (request, response) => {
@@ -40,19 +51,19 @@ router.put('/:id', async (request, response) => {
     await conn.open(sql, [], true, response)
 })
 
-router.delete('/', async (req, res) => {
+router.patch('/', async (req, res) => {
     sql = `update article set 
-            art_name = :name,
-            art_type = :type,
-            art_mat = :material,
-            art_price_unit =` + req.body.priceunit +
-            `art_price_wholesale =` + req.body.pricewholesale +
+            art_name = '` + req.body.name + `',
+            art_type = '` + req.body.type + `' ,
+            art_mat = '` + req.body.material + `',
+            art_descri = '` + req.body.descrip + `',
+            cat_id = `+ req.body.categorie+`,
+            art_quant_min = ` + req.body.quantmin +`,
+            art_price_unit = ` + req.body.priceunit +`,
+            art_price_wholesale =` + req.body.pricewholesale +
             ` where art_id =` + req.body.id
     console.log(sql)
-    let name = req.body.name
-    let type = req.body.type
-    let material = req.body.material
-    await conn.open(sql, [name, type, material], true, res)
+    await conn.open(sql, [], true, res)
 })
 
 module.exports = router

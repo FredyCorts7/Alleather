@@ -37,22 +37,47 @@
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
+                    <b-input-group-text>Categorie</b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-select  v-model="article.categorie" :options="categories"></b-form-select>
+                </b-input-group>
+
+                <b-input-group class="mb-3">
+                  <b-input-group-prepend>
                     <b-input-group-text>Material</b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input required type="text" class="form-control" placeholder="Ex. Cuero Italiano" v-model="article.material"/>
                 </b-input-group>
-                 <b-input-group class="mb-3">
+
+
+                <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price Unit</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. 99999" v-model="article.priceunit"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.priceunit"/>
                 </b-input-group>
-                 <b-input-group class="mb-3">
+
+                <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price Wholesale</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. 99998" v-model="article.pricewholesale"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. %10" v-model="article.pricewholesale"/>
                 </b-input-group>
+             
+                <b-input-group class="mb-3">
+                  <b-input-group-prepend>
+                    <b-input-group-text>Description</b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.descrip"/>
+                </b-input-group>
+
+                <b-input-group class="mb-3">
+                  <b-input-group-prepend>
+                    <b-input-group-text>Quantity minimum</b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.quantmin"/>
+                </b-input-group>
+
                 <b-button v-if="!updateisOpened" class="colornav" block @click="this.registerArticle">Add Article</b-button>
                 <b-button v-if="updateisOpened" class="colornav" block @click="this.updateArticles">Modify Article</b-button>
               </b-form>
@@ -68,24 +93,28 @@
               <tr class="theader">
                 <th>Name</th>
                 <th>Type</th>
+                <th>Categorie</th>
                 <th>Material</th>
                 <th>Price Unit</th>
                 <th>Price Wholesale</th>
-                <th>Image</th>
+                <th>Description</th>
+                <th>Quantity Minimum</th>
                 <th v-if="updateisOpened">Update</th>
                 <th v-if="deleteisOpened">Delete</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="art of this.$root.articles" :key="art">
+              <tr v-for="art of this.articles" :key="art">
                 <td>{{art[1]}}</td>
                 <td>{{art[2]}}</td>
                 <td>{{art[3]}}</td>
+                <td>{{art[4]}}</td>
                 <td>{{art[5]}}</td>
                 <td>{{art[6]}}</td>
-                <td><picture><img class="useritem" :src=art[7] /></picture></td>
-                <td v-if="updateisOpened"><b-button variant="warning" @click="toUpdateArticles(art[0])">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteArticles(art[0])">Delete</b-button></td>
+                <td>{{art[7]}}</td>
+                <td>{{art[8]}}</td>
+                <td v-if="updateisOpened"><b-button variant="info" @click="toUpdateArticles(art[0])"><img class="iconsown" src="imgs/icons/editdata.png"></b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="info" @click="deleteArticles(art[0])"><img class="iconsown" src="imgs/icons/delete.png"></b-button></td>
               </tr>
             </tbody>
         </table>
@@ -131,15 +160,19 @@ export default {
         type: '',
         material: '',
         priceunit: '',
-        pricewholesale: ''
+        pricewholesale: '',
+        categorie:'',
+        descrip:'',
+        quantmin:''
       },
-      image: null,
+      articles:[],
       options: [
         {value: '', text: 'Choose type...'},
         {value: 'Femenino', text: 'Femenino'},
         {value: 'Masculino', text: 'Masculino'},
         {value: 'Unisex', text: 'Unisex'}
       ],
+      categories:[],
       insertisOpened: true,
       selectisOpened: false,
       updateisOpened: false,
@@ -151,9 +184,17 @@ export default {
     if (!this.$session.exists()) {
       this.$router.push('/')
       this.$toastr.warning('No tiene el permiso para acceder a éste recurso')
-    } else this.getArticles()
+    } else{
+        this.getArticles()
+        this.getCategories()
+    }
   },
   methods: {
+    getCategories(){
+      fetch('/api/categorie/')
+        .then(res => res.json())
+        .then(data => this.categories = data)
+    },
     validarSoloNumeros (evt) {
       if(parseInt(evt.key) + '' === 'NaN'
           && evt.which !== 8 
@@ -195,14 +236,20 @@ export default {
       document.getElementById('select').style.display = 'block'
     },
     getArticles () {
-      fetch('/api/article')
+      fetch('/api/categorie',  {  
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
         .then(res => res.json())
-        .then(data => this.$root.articles = data)
+        .then(data => this.articles = data)
     },
     updateArticles (identify) {
       if (this.article.id != '' && this.article.name != '' && this.article.type != '' && this.article.material != '' && this.article.priceunit != '' && this.article.pricewholesale != '') {
-        fetch('/api/article/', {
-          method: 'DELETE',
+        fetch('/api/article/',{
+          method: 'PATCH',
           headers: {
             'Accept': 'application/json',
             'Content-type': 'application/json'
@@ -211,13 +258,17 @@ export default {
         })
           .then(res => res.json())
           .then(data => {
+            if (data.Error) this.$toastr.warning('Puede que éste email ya esté siendo utilizado', 'Register')
+          })
+          .catch(err => {
             this.$toastr.success('Se ha actualizado satisfactoriamente', 'Updating...')
             this.article.id = ''
             this.article.name = ''
-            this.article.type = ''
-            this.article.material = ''
             this.article.priceunit = ''
+            this.article.descrip = ''
+            this.article.quantmin = ''
             this.article.pricewholesale = ''
+            this.article.material = ''
             document.getElementById('insert').style.display = 'none'
             this.getArticles()
           })
@@ -238,13 +289,7 @@ export default {
     },
     toUpdateArticles (identify) {
       document.getElementById('insert').style.display = 'block'
-      fetch('/api/article/' + identify, {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/json'
-        }
-      })
+      fetch('/api/categorie/' + identify)
         .then(res => res.json())
         .then(data => {
           console.log(data)
@@ -252,12 +297,43 @@ export default {
           this.article.id = data[0][0]
           this.article.name = data[0][1]
           this.article.type = data[0][2]
-          this.article.material = data[0][3]
+          this.article.categorie=data[0][3]
+          this.article.material = data[0][4]
           this.article.priceunit = data[0][5]
           this.article.pricewholesale = data[0][6]
+          this.article.descrip = data[0][7]
+          this.article.quantmin = data[0][8]
           this.$toastr.info('Solo puedes modificar lo que se permita', 'Modify')
         })
     },
+     registerArticle () {
+      if (this.article.id != '' && this.article.name != '' && this.article.type != '' && this.article.categorie != '' && this.article.descrip != '' && this.article.quantmin != '' && this.article.priceunit != '' && this.article.pricewholesale != '' ) {
+            fetch('/api/article/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(this.article)
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+              if (data.Error) this.$toastr.warning('Puede que éste email ya esté siendo utilizado', 'Register')
+            })
+            .catch(err => {
+              this.$toastr.info('successfully registered', 'Register')
+              this.article.id = ''
+              this.article.name = ''
+              this.article.priceunit = ''
+              this.article.descrip= ''
+              this.article.quantmin= ''
+              this.article.pricewholesale= ''
+              this.article.material= ''
+              this.getArticles()
+            })
+      } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
+    }
   }
 }
 </script>

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
+import VueSession from 'vue-session'
 import VueToastr2 from 'vue-toastr-2'
 import 'vue-toastr-2/dist/vue-toastr-2.min.css'
-import VueSession from 'vue-session'
 
 //components
 import App from './App.vue'
@@ -17,10 +17,11 @@ import ManageArticle from './components/dinamics/funcionality/ManageArticle.vue'
 import ModifyData from './components/dinamics/funcionality/ModifyData.vue'
 import ListClient from './components/dinamics/funcionality/ListClient.vue'
 import ManageProvider from './components/dinamics/funcionality/ManageProvider.vue'
+import ManageStock from './components/dinamics/funcionality/ManageStock.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
-Vue.use(VueSession)
+Vue.use(VueSession, {persist:true})
 window.toastr = require('toastr')
 Vue.use(VueToastr2)
 
@@ -88,6 +89,11 @@ const router = new Router({
           name: 'Manage Provider',
           component: ManageProvider
         },
+        {
+          path: '/profile/managestock',
+          name: 'Manage Stock',
+          component: ManageStock
+        }
       ]
     }
   ]

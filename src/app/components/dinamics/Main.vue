@@ -26,18 +26,18 @@
                     <p id="namearticle">{{art[1]}}</p>
                 </div>
                 <b-popover triggers="hover" :target="'art_' + i" :header-bg-variant="info">
-                    <template slot="title" :style="back">{{art[1]}}</template>
+                    <template slot="title">{{art[1]}}</template>
                     <div>
-                        <p><strong>Description</strong><br>{{art[2]}}<br>
+                        <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
                             <strong>Type</strong><br>{{art[3]}}<br>
                             <strong>Material</strong><br>{{art[4]}}<br>
                             <strong>Size</strong><br>{{art[5]}}<br>
                             <strong>Unit Price</strong><br>{{art[6]}}<br>
                             <strong>Wholesale price</strong><br>{{art[7]}}<br>
                         </p>
-                        <b-btn><img class="iconsown" src="imgs/icons/car.png"></b-btn>
-                        <b-btn><img class="iconsown" src="imgs/icons/wish.png"></b-btn>
-                        <b-btn size="sm" variant="success">Buy</b-btn>
+                        <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
+                        <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
+                        <b-btn size="sm" class="colornav letraglobal">Buy</b-btn>
                     </div>
                 </b-popover>
             </div>  
@@ -60,6 +60,17 @@
 </template>
 
 <style>
+    .letraglobal {
+        font-family: "varela round";
+        color: black;
+        font-weight: bolder;
+        font-size: 15px
+    }
+    .letraglobalsinnegrita {
+        font-family: "varela round";
+        color: black;
+        font-size: 15px
+    }
     .iconsown {
         width: 40px;
         height: 40px;
@@ -85,7 +96,7 @@
         margin: 10px;
         height: 220px;
         width: 220px;
-        box-shadow: 6px 6px 25px rgba(64, 64, 65, 0.8);
+        box-shadow: 1px 1px 15px rgba(64, 64, 65, 0.8);
         z-index: 0;
         font-size: 10px;
         color: rgb(72, 75, 75);

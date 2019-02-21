@@ -27,7 +27,7 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
-        <b-modal id="login" hide-footer centered title="Log in" ref="modalogin"
+        <b-modal id="login" hide-footer centered title="Sign In" ref="modalogin"
             :header-bg-variant="headerBgVariant"
             :header-border-variant="headerBorVariant"
             :header-text-variant="headerTextVariant"
@@ -35,121 +35,133 @@
             :body-text-variant="bodyTextVariant"
             :footer-bg-variant="footerBgVariant"
             :footer-text-variant="footerTextVariant">
-            <b-container class="container">
-                <b-form v-if="show">
-                    <b-form-group id="exampleInputGroup1"
-                                    label="Email address:"
-                                    label-for="exampleInput1">
-                        <b-form-input id="exampleInput1"
-                                    type="email"
-                                    v-model="form.email"
-                                    required
-                                    placeholder="Enter email">
-                        </b-form-input>
-                    </b-form-group>
-                    <b-form-group id="exampleInputGroup2" class="marginbottom"
-                                    label="Password:"
-                                    label-for="exampleInput2">
-                        <b-form-input id="exampleInput2"
-                                    ref="passfield"
-                                    type="password"
-                                    v-model="form.pass" 
-                                    required
-                                    placeholder="Enter password">
-                        </b-form-input>
-                        <b-form-checkbox-group id="exampleInputGroup3"
-                                                ref="checkfield"
-                                                class="marginbottom"
-                                                v-model="showPass" 
-                                                @change="this.showPassword">
-                            <b-form-checkbox value="show">show password</b-form-checkbox>
-                        </b-form-checkbox-group>
-                    </b-form-group>
-                    <b-button block @click="this.logIn" variant="info" class="marginbott">Log in</b-button>
-                    <b-form-text>You have not yet registered? Do it now.</b-form-text>
-                    <router-link to="/pages/register" class="rout"><b-button block variant="info" @click="this.closeModal" class="marginbott">Register</b-button></router-link>
-                </b-form>
+            <b-container>
+                <b-row lg="12">
+                    <b-col>
+                        <img src="imgs/login.png" class="logologin">
+                    </b-col>
+                    <b-col>
+                        <b-form v-if="show">
+                            <b-form-group id="exampleInputGroup1"
+                                            label="Email address:"
+                                            label-for="exampleInput1">
+                                <b-form-input id="exampleInput1"
+                                            type="email"
+                                            v-model="form.email"
+                                            required
+                                            placeholder="Enter email">
+                                </b-form-input>
+                            </b-form-group>
+                            <b-form-group id="exampleInputGroup2" class="marginbottom"
+                                            label="Password:"
+                                            label-for="exampleInput2">
+                                <b-form-input id="exampleInput2"
+                                            type="password"
+                                            v-model="form.pass"
+                                            required
+                                            placeholder="Enter pSassword">
+                                </b-form-input>
+                                <b-form-checkbox-group id="exampleInputGroup3"
+                                                        ref="checkfield"
+                                                        class="marginbottom"
+                                                        v-model="showPass" 
+                                                        @change="this.showPassword">
+                                    <b-form-checkbox value="show">show password</b-form-checkbox>
+                                </b-form-checkbox-group>
+                            </b-form-group>
+                            <b-button block @click="this.logIn" class="marginbott colornav">Log in</b-button>
+                            <b-form-text>You have not yet registered? Do it now.</b-form-text>
+                            <router-link to="/pages/register" class="rout"><b-button block @click="this.closeModal" class="marginbott colornav">Register</b-button></router-link>
+                        </b-form>
+                    </b-col>
+                </b-row>
             </b-container>
         </b-modal>
     </b-container>
 </template>
 
 <style>
-#nav {
-  background-color: #68b0ab;
-  font-family: "varela round";
-  box-shadow: 0px 5px 20px rgba(64, 64, 65, 0.5);
-  height: 50px;
-}
-#login {
-  font-family: "varela round";
-}
-.backg:hover {
-  background-color: rgba(64, 64, 65, 0.9);
-}
-.marginbott {
-  margin-bottom: 5px;
-}
-.marginbottom {
-  margin-bottom: 35px;
-}
-.container {
-  width: 80%;
-}
-.titlenav {
-  font-weight: bolder;
-}
-.round {
-  border: none;
-  border-radius: 20px;
-}
-.t-shai:hover {
-  text-shadow: 3px 3px 10px rgba(64, 64, 65, 0.5);
-}
-.t-shai {
-  margin: 0px;
-}
-.icon {
-  width: 25px;
-  height: 25px;
-}
-.logo {
-  width: 55px;
-  height: 50px;
-  margin: 5px;
-}
-.icon:hover {
-  background-color: rgb(83, 141, 137);
-  border-radius: 20px;
-  padding: 2px;
-}
-.rout {
-  color: white;
-}
-.rout2 {
-  color: black;
-}
-.rout2:hover {
-  text-decoration: none;
-  color: white;
-}
-.rout:hover {
-  text-decoration: none;
-  color: white;
-}
-.user {
-  border-radius: 20px;
-  width: 21px;
-  height: 25px;
-}
-.useritem {
-  border-radius: 30px;
-  width: 46px;
-  height: 50px;
-}
-.decor-a {
-  margin: 0px 3px;
-}
+    #nav {
+        background-color: #68B0AB;
+        font-family: 'varela round';
+        box-shadow: 0px 5px 20px rgba(64, 64, 65, 0.5);
+        height: 50px
+    }
+    .logologin {
+        margin-right: auto;
+        margin-left: auto;
+        width: 160px;
+        height: 200px
+    }
+    #login {
+        font-family: 'varela round'
+    }
+    .backg:hover {
+        background-color: rgba(64, 64, 65, 0.9)
+    }
+    .marginbott {
+        margin-bottom: 5px;
+    }
+    .marginbottom {
+        margin-bottom: 35px
+    }
+    .container {
+        width: 80%
+    }
+    .titlenav {
+        font-weight: bolder
+    }
+    .round {
+        border: none;
+        border-radius: 20px
+    }
+    .t-shai:hover {
+        text-shadow: 3px 3px 10px rgba(64, 64, 65, 0.5)
+    }
+    .t-shai {
+        margin: 0px
+    }
+    .icon {
+        width: 25px;
+        height: 25px
+    }
+    .logo {
+        width: 55px;
+        height: 50px;
+        margin: 5px
+    }
+    .icon:hover {
+        background-color: rgb(83, 141, 137);
+        border-radius: 20px;
+        padding: 2px
+    }
+    .rout {
+        color: white;
+    }
+    .rout2 {
+        color: black;
+    }
+    .rout2:hover {
+        text-decoration: none;
+        color: white
+    }
+    .rout:hover {
+        text-decoration: none;
+        color: white
+    }
+    .user {
+        border-radius: 20px;
+        width: 21px;
+        height: 25px
+    }
+    .useritem {
+        border-radius: 30px;
+        width: 46px;
+        height: 50px
+    }
+    .decor-a {
+        margin: 0px 3px
+    }
 </style>
 
 <script>
@@ -162,7 +174,6 @@ export default {
             },
             nameArticle: '',
             show: true,
-            showPass: [],
             headerBgVariant: 'dark',
             headerBorVariant: 'dark',
             headerTextVariant: 'light',
@@ -171,12 +182,16 @@ export default {
             footerBgVariant: 'light',
             footerTextVariant: 'dark'
         }
-      },
-    existSession() {
-      if (!this.$session.exists()) this.$refs.modalogin.show();
     },
-    closeModal() {
-      this.$refs.modalogin.hide();
+    created () {
+        if (this.$session.exists()) this.$root.credentials = [this.$session.get('credent')[1], this.$session.get('credent')[7]]
+        this.debouncedGetArticlebyName = _.debounce(this.getArcticlebyName(), 800)
+    },
+    watch: {
+        nameArticle: function (newName, oldName) {
+            this.getArcticlebyName()
+            this.debouncedGetArticlebyName()
+        }
     },
     methods: {
         getArcticlebyName () {
@@ -222,13 +237,9 @@ export default {
         },
         showPassword () {
             let inputPass = document.querySelector('#exampleInput2')
-            if (this.showPass[0] == "show") {
-                inputPass.setAttribute("type", "password")
-            } else {
-                inputPass.setAttribute("type", "text")
-            }
+            if (this.showPass[0] == "show") inputPass.setAttribute("type", "password")
+            else inputPass.setAttribute("type", "text")
         }
     }
-  }
-;
+}
 </script>

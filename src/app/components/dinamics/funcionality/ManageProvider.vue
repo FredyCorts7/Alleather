@@ -6,7 +6,6 @@
       <b-button @click="this.showUpdate" class="colornav updateemp">Modify</b-button>
       <b-button @click="this.showDelete" class="colornav deleteemp">Delete</b-button>
       <b-button @click="this.showSelect" class="colornav selectemp">To List</b-button>
-      
     </b-row>
     <div id="insert" class="container">
       <b-row class="justify-content-center">
@@ -51,7 +50,7 @@
       </b-row>
     </div>
     <div id="select" class="justify-content-md-center manageemp">
-        <table class="table table-bordered table-outlined table-striped tabla table-responsive">
+        <table class="table table-bordered table-outlined table-striped tabla table-responsive stacktable">
             <thead>
               <tr class="theader">
                 <th>Name</th>
@@ -66,8 +65,8 @@
                 <td>{{pro[1]}}</td>
                 <td>{{pro[2]}}</td>
                 <td>{{pro[3]}}</td>
-                <td v-if="updateisOpened"><b-button variant="warning" @click="updateProviders(pro[0])">Update</b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="danger" @click="deleteProviders(pro[0])">Delete</b-button></td>
+                <td v-if="updateisOpened"><b-button variant="info" @click="updateProviders(pro[0])"><img class="iconsown" src="imgs/icons/editdata.png"></b-button></td>
+                <td v-if="deleteisOpened"><b-button variant="info" @click="deleteProviders(pro[0])"><img class="iconsown" src="imgs/icons/delete.png"></b-button></td>
                </tr>
             </tbody>
         </table>

@@ -194,9 +194,6 @@ export default {
             document.getElementById('select').style.display = 'block'
         },
         addPhones () {
-            console.log("entro al metodo")
-            console.log("telefono fijo"+this.telfij)
-            console.log("telefono celular"+this.telcel)
             if (this.telcel != '') {
                 fetch('/api/phone_per/' + this.$session.get('credent')[0] + '&' + this.telcel + '&' + 0, { // metodo para agregar telefonos celulares tipo 0 "0"
                     method: 'POST',
