@@ -27,7 +27,7 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
-        <b-modal id="login" hide-footer centered title="Sign In" ref="modalogin"
+        <b-modal id="login" size="lg" hide-footer centered title="Sign In" ref="modalogin"
             :header-bg-variant="headerBgVariant"
             :header-border-variant="headerBorVariant"
             :header-text-variant="headerTextVariant"
@@ -36,11 +36,11 @@
             :footer-bg-variant="footerBgVariant"
             :footer-text-variant="footerTextVariant">
             <b-container>
-                <b-row lg="12">
-                    <b-col>
+                <b-row class="justify-content-md-center">
+                    <b-col col lg="6">
                         <img src="imgs/login.png" class="logologin">
                     </b-col>
-                    <b-col>
+                    <b-col col lg="6">
                         <b-form v-if="show">
                             <b-form-group id="exampleInputGroup1"
                                             label="Email address:"
@@ -59,7 +59,7 @@
                                             type="password"
                                             v-model="form.pass"
                                             required
-                                            placeholder="Enter pSassword">
+                                            placeholder="Enter password">
                                 </b-form-input>
                                 <b-form-checkbox-group id="exampleInputGroup3"
                                                         ref="checkfield"
@@ -69,10 +69,12 @@
                                     <b-form-checkbox value="show">show password</b-form-checkbox>
                                 </b-form-checkbox-group>
                             </b-form-group>
-                            <b-button block @click="this.logIn" class="marginbott colornav">Log in</b-button>
-                            <b-form-text>You have not yet registered? Do it now.</b-form-text>
-                            <router-link to="/pages/register" class="rout"><b-button block @click="this.closeModal" class="marginbott colornav">Register</b-button></router-link>
                         </b-form>
+                    </b-col>
+                    <b-col col lg="12">
+                        <b-button block @click="this.logIn" class="marginbott colornav">Log in</b-button>
+                        <b-form-text>You have not yet registered? Do it now.</b-form-text>
+                        <router-link to="/pages/register" class="rout"><b-button block @click="this.closeModal" class="marginbott colornav">Register</b-button></router-link>
                     </b-col>
                 </b-row>
             </b-container>
@@ -81,9 +83,11 @@
 </template>
 
 <style>
+    body {
+        font-family: 'varela round'
+    }
     #nav {
         background-color: #68B0AB;
-        font-family: 'varela round';
         box-shadow: 0px 5px 20px rgba(64, 64, 65, 0.5);
         height: 50px
     }
@@ -91,10 +95,7 @@
         margin-right: auto;
         margin-left: auto;
         width: 160px;
-        height: 200px
-    }
-    #login {
-        font-family: 'varela round'
+        height: 160px
     }
     .backg:hover {
         background-color: rgba(64, 64, 65, 0.9)

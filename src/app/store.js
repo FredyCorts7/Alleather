@@ -14,7 +14,9 @@ export default new Vuex.Store({
         userData: state => state.userData
     },
     mutations: {
-        //
+        LOGIN: (state, data) => {
+
+        }
     },
     actions: {
 
