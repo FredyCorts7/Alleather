@@ -18,6 +18,8 @@ server.use('/api/employee', require('./routes/employee'))
 server.use('/api/phone_per', require('./routes/phone_per'))
 server.use('/api/provider', require('./routes/provider'))
 server.use('/api/categorie',require('./routes/categorie'))
+server.use('/api/size',require('./routes/size'))
+server.use('/api/color',require('./routes/color'))
 //static files
 server.use(express.static(__dirname + '/public'))
 

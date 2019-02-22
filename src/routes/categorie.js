@@ -19,4 +19,9 @@ router.post('/', async (request, response) => {
     await conn.open(sql, [], false, response)
 })
 
+router.delete('/', async (req, res) => {
+    sql = `insert into stock values(:nit, :idart, :idcolor, :idsize, :date, :quant, :price, :image)`
+    let nit = req.body.nit
+})
+
 module.exports = router

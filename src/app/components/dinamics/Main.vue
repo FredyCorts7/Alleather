@@ -25,7 +25,7 @@
                 <div class="shop-body">
                     <p id="namearticle">{{art[1]}}</p>
                 </div>
-                <b-popover triggers="hover" :target="'art_' + i" :header-bg-variant="info">
+                <b-popover triggers="click" :target="'art_' + i" header-bg-variant="info">
                     <template slot="title">{{art[1]}}</template>
                     <div>
                         <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
@@ -37,7 +37,7 @@
                         </p>
                         <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
                         <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
-                        <b-btn size="sm" class="colornav letraglobal">Buy</b-btn>
+                        <b-btn id="buttonbuy" size="sm" class="colornav letraglobal">Buy</b-btn>
                     </div>
                 </b-popover>
             </div>  
@@ -134,6 +134,7 @@
 export default {
     created () {
         this.getArticles()
+        this.startTimer2()
     },
     data: function () {
         return {
@@ -142,6 +143,13 @@ export default {
         }
     },
     methods: {
+        startTimer2 () {
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    document.getElementById('buttonbuy').focus()
+                })
+            }, 1)
+        },
         onSlideStart (slide) {
             this.sliding = true
         },

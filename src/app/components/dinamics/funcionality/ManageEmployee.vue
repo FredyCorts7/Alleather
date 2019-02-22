@@ -87,34 +87,17 @@
       </b-row>
     </div>
     <div id="select" class="justify-content-md-center manageemp">
-        <table class="table table-bordered table-outlined table-striped tabla table-responsive">
-            <thead>
-              <tr class="theader">
-                <th>Name</th>
-                <th>Sex</th>
-                <th>Email</th>
-                <th>Birthday</th>
-                <th>Image</th>
-                <th>Address</th>
-                <th v-if="updateisOpened">Update</th>
-                <th v-if="deleteisOpened">Delete</th>
-                <th v-if="hireisOpened">Hire</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="emp of employees" :key="emp">
-                <td>{{emp[0]}}</td>
-                <td>{{emp[1]}}</td>
-                <td>{{emp[2]}}</td>
-                <td>{{emp[3]}}</td>
-                <td><picture><img class="useritem" :src=emp[4] /></picture></td>
-                <td>{{emp[5]}}</td>
-                <td v-if="updateisOpened"><b-button variant="info" @click="updateEmployees(emp[6])"><img class="iconsown" src="imgs/icons/editdata.png"></b-button></td>
-                <td v-if="deleteisOpened"><b-button variant="info" @click="deleteEmployees(emp[6])"><img class="iconsown" src="imgs/icons/delete.png"></b-button></td>
-                <td v-if="hireisOpened"><b-button variant="info" @click="hireEmployees(emp[6])"><img class="iconsown" src="imgs/icons/hire.png"></b-button></td>
-              </tr>
-            </tbody>
-        </table>
+      <b-table :items="employees" :fields="fieldsEmployee" striped responsive stacked="lg" head-variant="dark" :outlined="true">
+        <template slot="update" slot-scope="data">
+          <b-button variant="info" @click="updateEmployees(data.item[6])"><img class="iconsown" src="imgs/icons/editdata.png"></b-button>
+        </template>
+        <template slot="delete" slot-scope="data">
+          <b-button variant="danger" @click="deleteEmployees(data.item[6])"><img class="iconsown" src="imgs/icons/delete.png"></b-button>
+        </template>
+        <template slot="hire" slot-scope="data">
+          <b-button @click="hireEmployees(data.item[6])"><img class="iconsown" src="imgs/icons/hire.png"></b-button>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -123,13 +106,6 @@
   .manageemp {
     font-family: 'varela round';
     margin: 80px 0 30px 0
-  }
-  .tabla {
-    border-radius: 20px;
-  }
-  .theader {
-    background-color: rgb(48, 51, 51);
-    color: white;
   }
   .colornav {
     background-color: #68B0AB;
@@ -148,13 +124,23 @@
     font-weight: bolder;
     margin: 40px 0 40px 0;
   }
-
 </style>
 
 <script>
+
+const FIELDS_NO_OPENED = [
+  {key: '0', label: 'Name'},
+  {key: '1', label: 'Sex'},
+  {key: '2', label: 'Email'},
+  {key: '3', label: 'Birthday'},
+  {key: '4', label: 'Image'},
+  {key: '5', label: 'Address'}
+]
+
 export default {
     data: function () {
       return {
+        fieldsEmployee: FIELDS_NO_OPENED,
         person: {
           code: '',
           name: '',
@@ -182,6 +168,33 @@ export default {
         toModify: false
       }
   },
+  watch: {
+    deleteisOpened: function (newValue) {
+      let obj = {key: 'delete', label: 'Delete'}
+      if(newValue) {
+        this.fieldsEmployee.push(obj)
+      } else {
+        this.fieldsEmployee = this.fieldsEmployee.filter(item => item.key !== 'delete')
+      }
+    },
+    updateisOpened: function (newValue) {
+      let obj = {key: 'update', label: 'Update'}
+      if(newValue) {
+        this.fieldsEmployee.push(obj)
+      } else {
+        this.fieldsEmployee = this.fieldsEmployee.filter(item => item.key !== 'update')
+      }
+      console.log('***************', this.fieldsEmployee)
+    },
+    hireisOpened: function (newValue) {
+      let obj = {key: 'hire', label: 'Hire'}
+      if(newValue) {
+        this.fieldsEmployee.push(obj)
+      } else {
+        this.fieldsEmployee = this.fieldsEmployee.filter(item => item.key !== 'hire')
+      }
+    }
+  },
   created() {
     if (!this.$session.exists()) {
       this.$router.push('/')
@@ -198,7 +211,7 @@ export default {
           && evt.which !== 39) evt.preventDefault()
     },
     registerPerson () {
-      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.image != '' && this.person.address != '') {
+      if (this.person.code != '' && this.person.name != '' && this.person.surname != '' && this.person.sex != '' && this.person.email != '' && this.person.birth != '' && this.person.address != '') {
         if (this.person.image == undefined) {
           fetch('/api/person/' + 0, {
             method: 'POST',
@@ -250,7 +263,6 @@ export default {
               this.person.pass = ''
               this.person.birth = ''
               this.person.address = ''
-              this.person.image = undefined
               this.getEmployees()
             })
         }

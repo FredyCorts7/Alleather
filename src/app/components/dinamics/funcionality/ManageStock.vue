@@ -2,10 +2,9 @@
     <div class="container-fluid">
     <h1 class="titulo">Manage Stock</h1>
     <b-row class="justify-content-md-center">
-      <b-button @click="this.showInsert" class="colornav insertemp">Add Stock</b-button>
-      <b-button @click="this.showAddStock" class="colornav updateemp">To List</b-button>
+      <b-button @click="this.showArticles" class="colornav updateemp">To List</b-button>
     </b-row>
-    <div id="register" class="container">
+    <div id="registerStock" class="container">
       <b-row class="justify-content-center">
         <b-col>
           <b-card no-body class="bg-dark regis">
@@ -94,7 +93,7 @@
                 <td>{{art[6]}}</td>
                 <td>{{art[7]}}</td>
                 <td>{{art[8]}}</td>
-                <td v-if="updateisOpened"><b-button variant="info" @click="toUpdateArticles(art[0])">Generate Stock</b-button></td>
+                <td><b-button variant="info" @click="showInsert(art[0])">Generate Stock</b-button></td>
               </tr>
             </tbody>
         </table>
@@ -103,7 +102,7 @@
 </template>
 
 <style>
-  #register {
+  #registerStock {
     display: none
   }
 </style>
@@ -129,48 +128,77 @@ export default {
     },
     created () {
         if (!this.$session.exists()) {
-            this.$router.push('/')
-            this.$toastr.warning('No tiene el permiso para acceder a éste recurso')
+          this.$router.push('/')
+          this.$toastr.warning('No tiene el permiso para acceder a éste recurso')
         } else{
-            this.getArticles()
-            this.getCategories()
+          this.getArticles()
+          this.getSizes()
+          this.getColors()
+          this.getProviders()
         }
     },
     methods: {
         getArticles () {
-            fetch('/api/categorie',  {  
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json'
-                }
-            })
-                .then(res => res.json())
-                .then(data => this.articles = data)
+          fetch('/api/categorie',  {  
+              method: 'POST',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-type': 'application/json'
+              }
+          })
+              .then(res => res.json())
+              .then(data => this.articles = data)
         },
         validarSoloNumeros (evt) {
-            if(parseInt(evt.key) + '' === 'NaN'
-                && evt.which !== 8 
-                && evt.which !== 9
-                && evt.which !== 190 
-                && evt.which !== 37 
-                && evt.which !== 39) evt.preventDefault()
+          if(parseInt(evt.key) + '' === 'NaN'
+              && evt.which !== 8 
+              && evt.which !== 9
+              && evt.which !== 190 
+              && evt.which !== 37 
+              && evt.which !== 39) evt.preventDefault()
         },
-        showInsert () {
-            this.insertisOpened = true
-            this.updateisOpened = false
-            this.deleteisOpened = false
-            this.selectisOpened = false
-            document.getElementById('insert').style.display = 'block'
-            document.getElementById('select').style.display = 'none'
+        showInsert ( identify ) {
+          this.toModify = true
+          this.insertisOpened = true
+          this.updateisOpened = false
+          this.stock.article = identify
+          document.getElementById('registerStock').style.display = 'block'
+          document.getElementById('listArticles').style.display = 'none'
         },
-        showAddStock () {
-            this.insertisOpened = false
-            this.updateisOpened = true
-            this.deleteisOpened = false
-            this.selectisOpened = false
-            document.getElementById('insert').style.display = 'none'
-            document.getElementById('select').style.display = 'block'
+        insertStock () {
+          fetch('/api/categorie',  {  
+              method: 'DELETE',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-type': 'application/json'
+              },
+              body: JSON.stringify(this.stock)
+          })
+            .then(res => res.json())
+            .then(data => {
+
+            })
+        },
+        showArticles () {
+          this.insertisOpened = false
+          this.updateisOpened = true
+          document.getElementById('registerStock').style.display = 'none'
+          document.getElementById('listArticles').style.display = 'block'
+        },
+        getSizes() {
+          fetch('/api/size/')
+            .then(res => res.json())
+            .then(data => this.stock.size = data)
+        },
+        getColors() {
+          fetch('/api/color/')
+            .then(res => res.json())
+            .then(data => this.stock.color = data)
+        },
+        getProviders() {
+          fetch('/api/provider/')
+            .then(res => res.json())
+            .then(data => this.stock.provider = data)
         }
     }
 }

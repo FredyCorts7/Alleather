@@ -209,8 +209,13 @@ export default {
         closeModal () {
             this.$refs.modalogin.hide()
         },
-        logIn () {
+        logIn: function () {
             if (this.form.email != '' && this.form.pass != '') {
+                /*console.log(this.$store, this.store, this.Store)
+                this.$store.dispatch('login', {email: this.form.email, pass: this.form.pass}).then(boo => {
+                    console.log(boo, this.$store.getters.userData)
+                })
+                return*/
                 fetch('/api/person/' + this.form.email + '&' + this.form.pass)
                     .then(res => res.json())
                     .then(data => {

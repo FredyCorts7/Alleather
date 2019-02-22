@@ -223,7 +223,6 @@ export default {
       this.updateisOpened = false
       this.deleteisOpened = false
       this.selectisOpened = true
-     
       document.getElementById('insert').style.display = 'none'
       document.getElementById('select').style.display = 'block'
     },

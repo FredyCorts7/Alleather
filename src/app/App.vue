@@ -11,6 +11,7 @@ import Nav from './components/statics/Nav.vue'
 import Foot from './components/statics/Foot.vue'
 
 export default {
+  name: 'app',
     components: {
         Nav,
         Foot
