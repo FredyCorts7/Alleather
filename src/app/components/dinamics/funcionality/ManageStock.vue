@@ -15,7 +15,7 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Provider</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-select required id="hand-cursor" :options="stock.provider"></b-form-select>
+                  <b-form-select required class="hand-cursor" v-model="stock.provider" :options="provider"></b-form-select>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -29,38 +29,38 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Color</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-select required id="hand-cursor" :options="stock.color"></b-form-select>
+                  <b-form-select required class="hand-cursor" v-model="stock.color" :options="color"></b-form-select>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Size</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-select :options="stock.size"></b-form-select>
+                  <b-form-select class="hand-cursor" v-model="stock.size" :options="size"></b-form-select>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Quantity</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. 30 units" v-model="stock.quant"/>
+                  <b-form-input required type="number" class="form-control" placeholder="Ex. 30 units" v-model="stock.quant"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. $200" v-model="stock.price"/>
+                  <b-form-input required type="number" class="form-control" placeholder="Ex. $200" v-model="stock.price"/>
                 </b-input-group>
              
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Image</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-file id="hand" accept=".jpg, .jpeg" placeholder="Choose a file..." v-model="stock.image"></b-form-file>
+                  <b-form-file id="hand" accept=".jpg, .jpeg" placeholder="Choose a file..." v-model="image"></b-form-file>
                 </b-input-group>
 
-                <b-button class="colornav" block >Add Stock</b-button>
+                <b-button class="colornav" block @click="this.insertStock">Add Stock</b-button>
               </b-form>
             </b-card-body>
           </b-card>
@@ -102,6 +102,9 @@
 </template>
 
 <style>
+  .hand-cursor {
+    cursor: pointer
+  }
   #registerStock {
     display: none
   }
@@ -112,14 +115,23 @@ export default {
     data: function () {
         return {
             stock: {
-                provider: [],
+                provider: '',
                 article: '',
-                color: [],
-                size: [],
+                color: '',
+                size: '',
                 quant: '',
                 price: '',
-                image: ''
             },
+            provider: [
+              {value: '', text: 'Choose an option...'}
+            ],
+            color: [
+              {value: '', text: 'Choose an option...'}
+            ],
+            size: [
+              {value: '', text: 'Choose an option...'}
+            ],
+            image: '',
             articles: [],
             insertisOpened: false,
             updateisOpened: true,
@@ -159,46 +171,70 @@ export default {
         },
         showInsert ( identify ) {
           this.toModify = true
-          this.insertisOpened = true
-          this.updateisOpened = false
           this.stock.article = identify
           document.getElementById('registerStock').style.display = 'block'
           document.getElementById('listArticles').style.display = 'none'
         },
         insertStock () {
-          fetch('/api/categorie',  {  
-              method: 'DELETE',
+          if (this.stock.provider != '' && this.stock.article != '' && this.stock.color != '' && this.stock.size != '' && this.stock.quant != '' && this.stock.price != '' && this.image) {
+            this.stock.image = this.image.name
+            fetch('/api/stock',  {
+              method: 'POST', 
               headers: {
                   'Accept': 'application/json',
                   'Content-type': 'application/json'
               },
               body: JSON.stringify(this.stock)
-          })
-            .then(res => res.json())
-            .then(data => {
-
             })
+              .then(res => res.json())
+              .then(data => {
+                if (data.Error) this.$toastr.danger('Algo ha salido mal', 'Add Stock')
+              })
+              .catch(err => {
+                this.stock.provider = ''
+                this.stock.article = ''
+                this.stock.color = ''
+                this.stock.size = ''
+                this.stock.quant = ''
+                this.stock.price = ''
+                document.getElementById('registerStock').style.display = 'none'
+                document.getElementById('listArticles').style.display = 'block'
+                this.$toastr.success('Register stock succesfully', 'Add Stock')
+              })
+          } else {
+            this.$toastr.warning('Debes llenar todos los datos del stock', 'Add Stock')
+          }
         },
         showArticles () {
-          this.insertisOpened = false
-          this.updateisOpened = true
           document.getElementById('registerStock').style.display = 'none'
           document.getElementById('listArticles').style.display = 'block'
         },
         getSizes() {
           fetch('/api/size/')
             .then(res => res.json())
-            .then(data => this.stock.size = data)
+            .then(data => {
+              for (let i = 0; i < data.length; i++) {
+                this.size.push({value: data[i][0], text: data[i][1]})
+              }
+            })
         },
         getColors() {
           fetch('/api/color/')
             .then(res => res.json())
-            .then(data => this.stock.color = data)
+            .then(data => {
+              for (let i = 0; i < data.length; i++) {
+                this.color.push({value: data[i][0], text: data[i][1]})
+              }
+            })
         },
         getProviders() {
           fetch('/api/provider/')
             .then(res => res.json())
-            .then(data => this.stock.provider = data)
+            .then(data => {
+              for (let i = 0; i < data.length; i++) {
+                this.provider.push({value: data[i][0], text: data[i][1]})
+              }
+            })
         }
     }
 }

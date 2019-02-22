@@ -25,19 +25,19 @@
                 <div class="shop-body">
                     <p id="namearticle">{{art[1]}}</p>
                 </div>
-                <b-popover triggers="click" :target="'art_' + i" header-bg-variant="info">
+                <b-popover triggers="click" :target="'art_' + i" :header-bg-variant=headvariant>
                     <template slot="title">{{art[1]}}</template>
                     <div>
                         <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
                             <strong>Type</strong><br>{{art[3]}}<br>
                             <strong>Material</strong><br>{{art[4]}}<br>
                             <strong>Size</strong><br>{{art[5]}}<br>
-                            <strong>Unit Price</strong><br>{{art[6]}}<br>
-                            <strong>Wholesale price</strong><br>{{art[7]}}<br>
+                            <strong>Unit Price</strong><br>$ {{art[6]}}<br>
+                            <strong>Wholesale price</strong><br>$ {{art[7]}}<br>
                         </p>
-                        <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
-                        <b-btn size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
-                        <b-btn id="buttonbuy" size="sm" class="colornav letraglobal">Buy</b-btn>
+                        <b-btn @click="addShoppingCart(art[1])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
+                        <b-btn @click="addWishes(art[0])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
+                        <b-btn id="buttonbuy" class="colornav letraglobal">Buy</b-btn>
                     </div>
                 </b-popover>
             </div>  
@@ -134,21 +134,47 @@
 export default {
     created () {
         this.getArticles()
-        this.startTimer2()
     },
     data: function () {
         return {
             slide: 0,
-            sliding: null,
+            sliding: null
         }
     },
     methods: {
-        startTimer2 () {
-            setTimeout(() => {
-                this.$nextTick(() => {
-                    document.getElementById('buttonbuy').focus()
+        addShoppingCart (article) {
+            if (this.$session.exists()) {
+                this.$root.shoppingcart.push(article)
+                this.$toastr.success('Add successfully', 'Add to Shopping Cart')
+            } else {
+                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
+            }
+        },
+        addWishes(artid) {
+            if (this.$session.exists()) {
+                console.log(this.$session.get('credent')[0])
+                fetch('/api/wish/' + this.$session.get('credent')[0] + '&' + artid, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json'
+                    }
                 })
-            }, 1)
+                    .then(res => res.json())
+                    .then(data => this.$toastr.success('Add successfully', 'Add to Wishes'))
+                    .catch(err => this.$toastr.error('This article you already like', 'Add to Wishes'))
+            } else {
+                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
+            }
+        },
+        getWishes() {
+            if (this.$session.exists()) {
+                fetch('/api/wish')
+                    .then(res => res.json())
+                    .then(data => this.$root.wishes = data)
+            } else {
+                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
+            }
         },
         onSlideStart (slide) {
             this.sliding = true
@@ -161,9 +187,8 @@ export default {
                 .then(res => res.json())
                 .then(data => {
                     this.$root.articles = data
-                    console.log(this.$root.articles)
                 })
-        },
+        }
     }
 }
 </script>

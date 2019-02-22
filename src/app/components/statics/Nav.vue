@@ -7,10 +7,10 @@
                 <b-navbar-nav class="ml-auto t-sha">
                     <b-nav-item class="t-shai" active><router-link to="/" class="rout">Home</router-link></b-nav-item>
                     <b-nav-item class="t-shai" active>
-                        <b-img src="imgs/nav/corazon.png" class="icon"/>
+                        <b-img src="imgs/nav/corazon.png" class="icon" v-b-modal.wishes/>
                     </b-nav-item>
-                    <b-nav-item class="t-shai" active>
-                        <b-img src="imgs/nav/carrito.png" class="icon"/>
+                    <b-nav-item class="t-shai" active v-b-modal.shopcart>
+                        <b-img src="imgs/nav/carrito.png" class="icon" v-b-modal.shopcart/>
                     </b-nav-item>
                     <b-nav-item-dropdown>
                         <template slot="button-content">
@@ -78,6 +78,12 @@
                     </b-col>
                 </b-row>
             </b-container>
+        </b-modal>
+        <b-modal id="shopcart">
+            <b-table :items="this.$root.shoppingcart" :fields="fieldsArt" striped head-variant="dark" :outlined="true"></b-table>
+        </b-modal>
+        <b-modal id="wishes">
+            <b-table :items="this.$root.wishes" striped head-variant="dark" :outlined="true"></b-table>
         </b-modal>
     </b-container>
 </template>
@@ -166,9 +172,15 @@
 </style>
 
 <script>
+
+const FIELDS_NO_OPENED = [
+  {key: '0', label: 'Name'}
+]
+
 export default {
     data: function () {
         return {
+            fieldsArt: FIELDS_NO_OPENED,
             form: {
                 email: '',
                 pass: ''
@@ -181,7 +193,8 @@ export default {
             bodyBgVariant: 'light',
             bodyTextVariant: 'dark',
             footerBgVariant: 'light',
-            footerTextVariant: 'dark'
+            footerTextVariant: 'dark',
+            showPass: ''
         }
     },
     created () {

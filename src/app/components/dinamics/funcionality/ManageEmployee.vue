@@ -14,8 +14,9 @@
           <b-card no-body class="bg-dark regis">
             <b-card-body class="p-4">
               <b-form>
-                <h1>Register Employees</h1>
-                <p class="text-muted">Register Employees</p>
+                <h1 v-if="!updateisOpened">Register Employees</h1>
+                <h1 v-if="updateisOpened">Modify Employee</h1>
+                <p v-if="!updateisOpened" class="text-muted">Register Employees</p>
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Identify code</b-input-group-text>

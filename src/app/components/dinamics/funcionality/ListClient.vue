@@ -1,30 +1,8 @@
 <template>
   <div class="container-fluid">
     <h1 class="titulo">List Clients</h1>
-  
     <div class="justify-content-md-center manageemp">
-        <table class="table table-bordered table-outlined table-striped tabla table-responsive">
-            <thead>
-              <tr class="theader">
-                <th>Name</th>
-                <th>Sex</th>
-                <th>Email</th>
-                <th>Birthday</th>
-                <th>Image</th>
-                <th>Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="cli of clients" :key="cli">
-                <td>{{cli[0]}}</td>
-                <td>{{cli[1]}}</td>
-                <td>{{cli[2]}}</td>
-                <td>{{cli[3]}}</td>
-                <td><picture><img class="useritem" :src=cli[4] /></picture></td>
-                <td>{{cli[5]}}</td>
-              </tr>
-            </tbody>
-        </table>
+      <b-table :items="clients" :fields="fieldsClient" striped responsive stacked="lg" head-variant="dark" :outlined="true"></b-table>
     </div>
   </div>
 </template>
@@ -59,9 +37,20 @@
 </style>
 
 <script>
+
+const FIELDS_NO_OPENED = [
+  {key: '0', label: 'Name'},
+  {key: '1', label: 'Sex'},
+  {key: '2', label: 'Email'},
+  {key: '3', label: 'Birthday'},
+  {key: '4', label: 'Image'},
+  {key: '5', label: 'Address'}
+]
+
 export default {
     data: function () {
       return {
+        fieldsClient: FIELDS_NO_OPENED,
         clients: [],
       }
   },

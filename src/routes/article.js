@@ -30,7 +30,7 @@ router.patch('/:id', async (req, res) => { //tomaremos éste patch como nuestro 
 
 router.post('/', async (req, res) => {
     sql = `insert into article
-    values (:id,:name,:type,:categorie,:material,:priceunit,:pricewholesale,:descrip,:quantmin,0)`
+        values (:id, :name, :type, :categorie, :material, :priceunit, :pricewholesale, :descrip, :quantmin,1)`
     let id= parseInt(req.body.id)
     let name=req.body.name
     let type=req.body.type

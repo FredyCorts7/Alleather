@@ -81,14 +81,14 @@
                             <b-input-group-prepend>
                             <b-input-group-text>Telefono Celular</b-input-group-text>
                             </b-input-group-prepend>
-                            <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 3148456587" v-model="telcel"/>
+                            <b-form-input required type="number" class="form-control" placeholder="Ex. 3148456587" v-model="telcel"/>
                         </b-input-group>
 
                         <b-input-group class="mb-3" v-if="this.showAddPhones">
                             <b-input-group-prepend>
                             <b-input-group-text>Telefono Fijo</b-input-group-text>
                             </b-input-group-prepend>
-                            <b-form-input @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 5712334" v-model="telfij"/>
+                            <b-form-input required type="number" class="form-control" placeholder="Ex. 5712334" v-model="telfij"/>
                         </b-input-group>
 
                         <b-button v-if="this.showModify" class="colornav" block @click="this.modifyPerson">Modify Data</b-button>
@@ -239,11 +239,11 @@ export default {
                 })
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data)
                         if (data.Error) this.$toastr.warning('Puede que éste email ya esté siendo utilizado', 'Modify')
                     })
                     .catch(err => {
-                        this.$toastr.info('successfully modified', 'Modify')
+                        this.$root.credentials = [this.person.name, 'imgs/people/' + this.image.name]
+                        this.$toastr.success('successfully modified', 'Updating...')
                         this.person.code = ''
                         this.person.name = ''
                         this.person.surname = ''
@@ -253,9 +253,7 @@ export default {
                         this.person.birth = ''
                         this.person.address = ''
                         this.person.image = 'default.png'
-                        this.$session.destroy()
                         this.$router.push('/')
-                        this.$toastr.warning('Se te ha expulsado de la sesión porque modificaste tus propios datos', 'Session')
                     })
             } else this.$toastr.warning('Debes suministrar todos los datos', 'Register')
         },
@@ -263,7 +261,6 @@ export default {
             fetch('/api/phone_per/' + this.$session.get('credent')[0])
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
                     this.phones = data
                 })
         }

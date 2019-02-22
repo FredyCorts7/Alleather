@@ -20,6 +20,8 @@ server.use('/api/provider', require('./routes/provider'))
 server.use('/api/categorie',require('./routes/categorie'))
 server.use('/api/size',require('./routes/size'))
 server.use('/api/color',require('./routes/color'))
+server.use('/api/stock',require('./routes/stock'))
+
 //static files
 server.use(express.static(__dirname + '/public'))
 

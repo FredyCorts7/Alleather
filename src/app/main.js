@@ -112,6 +112,8 @@ new Vue({
         'User',
         'imgs/nav/user.png'
       ],
+      shoppingcart: [],
+      wishes: [],
       articles: []
     }
   },

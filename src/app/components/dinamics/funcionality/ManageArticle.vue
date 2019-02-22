@@ -18,7 +18,7 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Identify code</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input :disabled=this.toModify @keydown.native="validarSoloNumeros" required type="text" class="form-control" placeholder="Ex. 00000001" v-model="article.id"/>
+                  <b-form-input :disabled=this.toModify required type="number" class="form-control" placeholder="Ex. 00000001" v-model="article.id"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -32,14 +32,14 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Type</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-select required id="hand-cursor" v-model="article.type" :options="options"></b-form-select>
+                  <b-form-select required class="hand-cursor" v-model="article.type" :options="options"></b-form-select>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Categorie</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-select  v-model="article.categorie" :options="categories"></b-form-select>
+                  <b-form-select class="hand-cursor" v-model="article.categorie" :options="categories"></b-form-select>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
@@ -54,28 +54,28 @@
                   <b-input-group-prepend>
                     <b-input-group-text>Price Unit</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.priceunit"/>
+                  <b-form-input required type="number" class="form-control" placeholder="Ex. 25%" v-model="article.priceunit"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Price Wholesale</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. %10" v-model="article.pricewholesale"/>
+                  <b-form-input required type="number" class="form-control" placeholder="Ex. 10%" v-model="article.pricewholesale"/>
                 </b-input-group>
              
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Description</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.descrip"/>
+                  <b-form-input required type="text" class="form-control" placeholder="Ex. Material ideal para relajar un cuepo tenso." v-model="article.descrip"/>
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>Quantity minimum</b-input-group-text>
                   </b-input-group-prepend>
-                  <b-form-input required type="text" class="form-control" placeholder="Ex. %25" v-model="article.quantmin"/>
+                  <b-form-input required type="number" class="form-control" placeholder="Ex. 3" v-model="article.quantmin"/>
                 </b-input-group>
 
                 <b-button v-if="!updateisOpened" class="colornav" block @click="this.registerArticle">Add Article</b-button>
@@ -172,7 +172,9 @@ export default {
         {value: 'Masculino', text: 'Masculino'},
         {value: 'Unisex', text: 'Unisex'}
       ],
-      categories:[],
+      categories:[
+        {value: '', text: 'Choose a Category...'}
+      ],
       insertisOpened: true,
       selectisOpened: false,
       updateisOpened: false,
@@ -193,7 +195,11 @@ export default {
     getCategories(){
       fetch('/api/categorie/')
         .then(res => res.json())
-        .then(data => this.categories = data)
+        .then(data => {
+          for (let i = 0; i < data.length; i++) {
+            this.categories.push({value: data[i][0], text: data[i][1]})
+          }
+        })
     },
     validarSoloNumeros (evt) {
       if(parseInt(evt.key) + '' === 'NaN'
@@ -270,6 +276,7 @@ export default {
             this.article.pricewholesale = ''
             this.article.material = ''
             document.getElementById('insert').style.display = 'none'
+            document.getElementById('select').style.display = 'block'
             this.getArticles()
           })
       } else this.$toastr.warning('Debes suministrar todos los datos', 'Updating...')
@@ -289,6 +296,7 @@ export default {
     },
     toUpdateArticles (identify) {
       document.getElementById('insert').style.display = 'block'
+      document.getElementById('select').style.display = 'none'
       fetch('/api/categorie/' + identify)
         .then(res => res.json())
         .then(data => {
@@ -297,7 +305,7 @@ export default {
           this.article.id = data[0][0]
           this.article.name = data[0][1]
           this.article.type = data[0][2]
-          this.article.categorie=data[0][3]
+          this.article.categorie = data[0][3]
           this.article.material = data[0][4]
           this.article.priceunit = data[0][5]
           this.article.pricewholesale = data[0][6]
@@ -306,7 +314,7 @@ export default {
           this.$toastr.info('Solo puedes modificar lo que se permita', 'Modify')
         })
     },
-     registerArticle () {
+    registerArticle () {
       if (this.article.id != '' && this.article.name != '' && this.article.type != '' && this.article.categorie != '' && this.article.descrip != '' && this.article.quantmin != '' && this.article.priceunit != '' && this.article.pricewholesale != '' ) {
             fetch('/api/article/', {
             method: 'POST',
