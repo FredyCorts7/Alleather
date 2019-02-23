@@ -6,7 +6,7 @@
             <b-collapse is-nav id="nav_collapse menu">
                 <b-navbar-nav class="ml-auto t-sha">
                     <b-nav-item class="t-shai" active><router-link to="/" class="rout">Home</router-link></b-nav-item>
-                    <b-nav-item class="t-shai" active>
+                    <b-nav-item class="t-shai" active @click="this.getWishes">
                         <b-img src="imgs/nav/corazon.png" class="icon" v-b-modal.wishes/>
                     </b-nav-item>
                     <b-nav-item class="t-shai" active v-b-modal.shopcart>
@@ -79,11 +79,48 @@
                 </b-row>
             </b-container>
         </b-modal>
-        <b-modal id="shopcart">
-            <b-table :items="this.$root.shoppingcart" :fields="fieldsArt" striped head-variant="dark" :outlined="true"></b-table>
+        <b-modal id="shopcart" size="lg" centered hide-footer title="Your Shopping Cart"
+            :header-bg-variant="headerBgVariant"
+            :header-border-variant="headerBorVariant"
+            :header-text-variant="headerTextVariant"
+            :body-bg-variant="bodyBgVariant"
+            :body-text-variant="bodyTextVariant"
+            :footer-bg-variant="footerBgVariant"
+            :footer-text-variant="footerTextVariant">
+            <center>
+                <template v-for="(shop, i) in this.$root.shoppingcart">
+                    <div class="shop2" :key="'art_' + i" :id="'art_' + i">
+                        <div class="shop-img">
+                            <img :src=shop[8] />
+                        </div>
+                        <div class="shop-body">
+                            <p id="namearticle2">{{shop[1]}} - {{shop[9]}}</p>
+                        </div>
+                    </div>
+                </template>
+                <b-btn class="colornav" block>Buy</b-btn>
+            </center>
         </b-modal>
-        <b-modal id="wishes">
-            <b-table :items="this.$root.wishes" striped head-variant="dark" :outlined="true"></b-table>
+        <b-modal id="wishes" size="lg" hide-footer centered title="Your Wishes"
+            :header-bg-variant="headerBgVariant"
+            :header-border-variant="headerBorVariant"
+            :header-text-variant="headerTextVariant"
+            :body-bg-variant="bodyBgVariant"
+            :body-text-variant="bodyTextVariant"
+            :footer-bg-variant="footerBgVariant"
+            :footer-text-variant="footerTextVariant">
+            <center>
+                <template v-for="(wish, i) in this.$root.wishes">
+                    <div class="shop2" :key="'art_' + i" :id="'art_' + i">
+                        <div class="shop-img">
+                            <img :src=wish[8] />
+                        </div>
+                        <div class="shop-body">
+                            <p id="namearticle2">{{wish[1]}}</p>
+                        </div>
+                    </div>
+                </template>
+            </center>
         </b-modal>
     </b-container>
 </template>
@@ -172,15 +209,9 @@
 </style>
 
 <script>
-
-const FIELDS_NO_OPENED = [
-  {key: '0', label: 'Name'}
-]
-
 export default {
     data: function () {
         return {
-            fieldsArt: FIELDS_NO_OPENED,
             form: {
                 email: '',
                 pass: ''
@@ -208,6 +239,24 @@ export default {
         }
     },
     methods: {
+        getWishes() {
+            if (this.$session.exists()) {
+                this.$root.wishes = []
+                fetch('/api/wish/' + this.$session.get('credent')[0])
+                    .then(res => res.json())
+                    .then(data => {
+                        for (let i = 0; i < data.length; i++) {
+                            for (let j = 0; j < this.$root.articles.length; j++) {
+                                if (data[i][1] == this.$root.articles[j][0]) {
+                                    this.$root.wishes.push(this.$root.articles[j])
+                                }
+                            }
+                        }
+                    })
+            } else {
+                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
+            }
+        },
         getArcticlebyName () {
             this.$toastr.info('Acabas de buscar articulos relacionados con "' + this.nameArticle + '"', 'Search')
             fetch('/api/article/' + this.nameArticle)

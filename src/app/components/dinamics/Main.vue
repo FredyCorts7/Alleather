@@ -25,7 +25,7 @@
                 <div class="shop-body">
                     <p id="namearticle">{{art[1]}}</p>
                 </div>
-                <b-popover triggers="click" :target="'art_' + i" :header-bg-variant=headvariant>
+                <b-popover triggers="hover click" :target="'art_' + i">
                     <template slot="title">{{art[1]}}</template>
                     <div>
                         <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
@@ -35,12 +35,18 @@
                             <strong>Unit Price</strong><br>$ {{art[6]}}<br>
                             <strong>Wholesale price</strong><br>$ {{art[7]}}<br>
                         </p>
-                        <b-btn @click="addShoppingCart(art[1])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
+                        <b-input-group class="mb-3">
+                            <b-input-group-prepend>
+                                <b-input-group-text>Quantity</b-input-group-text>
+                            </b-input-group-prepend>
+                            <b-form-input required type="number" class="form-control" placeholder="Ex. 12" min="1" v-model="quantity" />
+                        </b-input-group>
+                        <b-btn @click="addShoppingCart(art)" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
                         <b-btn @click="addWishes(art[0])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
                         <b-btn id="buttonbuy" class="colornav letraglobal">Buy</b-btn>
                     </div>
                 </b-popover>
-            </div>  
+            </div>
         </template>
         </center>
         <div class="flex-row align-items-center page noart" v-if="this.$root.articles.length == 0">
@@ -79,6 +85,11 @@
         font-family: "varela round";
         font-size: 15px
     }
+    #namearticle2 {
+        font-family: "varela round";
+        font-size: 10px;
+        text-align: center
+    }
     .noart {
         margin: 10px !important
     }
@@ -98,7 +109,18 @@
         width: 220px;
         box-shadow: 1px 1px 15px rgba(64, 64, 65, 0.8);
         z-index: 0;
-        font-size: 10px;
+        color: rgb(72, 75, 75);
+        display: inline-block;
+        border-radius: 8px
+    }
+    .shop2 {
+        position: relative;
+        overflow: hidden;
+        margin: 5px;
+        height: 120px;
+        width: 120px;
+        box-shadow: 1px 1px 15px rgba(64, 64, 65, 0.8);
+        z-index: 0;
         color: rgb(72, 75, 75);
         display: inline-block;
         border-radius: 8px
@@ -108,7 +130,13 @@
         background-color: rgb(54, 54, 54);
         z-index: -1
     }
-    .shop .shop-img>img {
+    .shop .shop-img > img {
+        width: 100%;
+        height: 100%;
+        -webkit-transition: 0.2s all;
+        transition: 0.2s all;
+    }
+    .shop2 .shop-img > img {
         width: 100%;
         height: 100%;
         -webkit-transition: 0.2s all;
@@ -138,21 +166,33 @@ export default {
     data: function () {
         return {
             slide: 0,
-            sliding: null
+            sliding: null,
+            quantity: 1
         }
     },
     methods: {
+        search (article) {
+            var found = false
+            for (let i = 0; i < this.$root.shoppingcart.length; i++) {
+                if (this.$root.shoppingcart[i][0] == article) {
+                    found = true
+                    break
+                }
+            }
+            return found
+        },
         addShoppingCart (article) {
             if (this.$session.exists()) {
-                this.$root.shoppingcart.push(article)
-                this.$toastr.success('Add successfully', 'Add to Shopping Cart')
-            } else {
-                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
-            }
+                if (!this.search(article[0])) {
+                    article[9] = this.quantity
+                    this.$root.shoppingcart.push(article)
+                    this.quantity = 1
+                    this.$toastr.success('Add successfully', 'Add to Shopping Cart')
+                } else this.$toastr.warning('Already exist in your shopping cart', 'Add to Shopping Cart')
+            } else this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
         },
         addWishes(artid) {
             if (this.$session.exists()) {
-                console.log(this.$session.get('credent')[0])
                 fetch('/api/wish/' + this.$session.get('credent')[0] + '&' + artid, {
                     method: 'POST',
                     headers: {
@@ -161,17 +201,31 @@ export default {
                     }
                 })
                     .then(res => res.json())
-                    .then(data => this.$toastr.success('Add successfully', 'Add to Wishes'))
-                    .catch(err => this.$toastr.error('This article you already like', 'Add to Wishes'))
+                    .then(data => {
+                        this.$toastr.error('This article you already like', 'Add to Wishes')
+                    })
+                    .catch(err => {
+                        this.$toastr.success('Add successfully', 'Add to Wishes')
+                        this.getWishes()
+                    })
             } else {
                 this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
             }
         },
         getWishes() {
             if (this.$session.exists()) {
-                fetch('/api/wish')
+                this.$root.wishes = []
+                fetch('/api/wish/' + this.$session.get('credent')[0])
                     .then(res => res.json())
-                    .then(data => this.$root.wishes = data)
+                    .then(data => {
+                        for (let i = 0; i < data.length; i++) {
+                            for (let j = 0; j < this.$root.articles.length; j++) {
+                                if (data[i][1] == this.$root.articles[j][0]) {
+                                    this.$root.wishes.push(this.$root.articles[j])
+                                }
+                            }
+                        }
+                    })
             } else {
                 this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add to Wishes')
             }

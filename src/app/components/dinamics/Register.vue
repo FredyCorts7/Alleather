@@ -98,7 +98,7 @@
 </style>
 
 <script>
-export default {  
+export default {
   data: function () {
     return {
       person: {
