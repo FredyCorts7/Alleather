@@ -10,7 +10,7 @@ router.get('/', async (request, response) => {
 })
 
 router.get('/:email&:pass', async (request, response) => {
-    sql = `select per_code, per_name, per_surname, per_sex, per_email, decod_pass(per_password), per_birthday, per_image, per_address, rol_id, per_hired 
+    sql = `select per_code, per_name, per_surname, per_sex, per_email, decod_pass(per_password), per_birthday, per_image, per_address, rol_id, per_hired, last_time(last_time) 
             from person 
             where per_email = :email and decod_pass(per_password) = :pass`
     var email = request.params.email

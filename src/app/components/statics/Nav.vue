@@ -288,7 +288,7 @@ export default {
                             this.$session.start()
                             this.$session.set('credent', data[0])
                             this.$forceUpdate()
-                            this.$toastr.info('Bienvenido ' + this.$root.credentials[0], 'Log in')
+                            this.$toastr.info('Bienvenido ' + this.$root.credentials[0] + ' hace ' + this.$session.get('credent')[11] + ' dias no ingresabas', 'Log in')
                             this.closeModal()
                         } else {
                             this.$toastr.warning('No concuerdan las credenciales', 'Log in')

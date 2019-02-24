@@ -22,6 +22,7 @@ server.use('/api/size',require('./routes/size'))
 server.use('/api/color',require('./routes/color'))
 server.use('/api/stock',require('./routes/stock'))
 server.use('/api/wish',require('./routes/wish'))
+server.use('/api/invoice',require('./routes/invoice'))
 
 //static files
 server.use(express.static(__dirname + '/public'))

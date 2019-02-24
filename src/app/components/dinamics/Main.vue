@@ -43,7 +43,7 @@
                         </b-input-group>
                         <b-btn @click="addShoppingCart(art)" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
                         <b-btn @click="addWishes(art[0])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
-                        <b-btn id="buttonbuy" class="colornav letraglobal">Buy</b-btn>
+                        <b-btn id="buttonbuy" class="colornav letraglobal" @click="registerInvoice(art[0])">Buy</b-btn>
                     </div>
                 </b-popover>
             </div>
@@ -168,9 +168,20 @@ export default {
             slide: 0,
             sliding: null,
             quantity: 1
-        }
+        }/*Por favor señor sistema necesitamos que se facture y se descuente*/
     },
     methods: {
+        registerInvoice(article) {
+            let money = 0
+            for (let i = 0; i < this.$root.shoppingcart.length; i++) {
+                money += this.$root.shoppingcart[6] * this.$root.shoppingcart[9]
+            }
+            fetch('/api/invoice/', + 1 + '&' + this.$session.get('credent')[0] + '&' + money)
+                .then(res => res.json())
+                .then(data => {
+                    this.$toastr.info('Successfully', 'Add Invoice')
+                })
+        },
         search (article) {
             var found = false
             for (let i = 0; i < this.$root.shoppingcart.length; i++) {

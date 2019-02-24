@@ -18,4 +18,9 @@ router.post('/', async (request, response) => {
     await conn.open(sql, [], false, response)
 })
 
+router.put('/', async (request, response) => {
+    sql = `select * from article where art_id not in (select art_id from stock)`
+    await conn.open(sql, [], false, response)
+})
+
 module.exports = router

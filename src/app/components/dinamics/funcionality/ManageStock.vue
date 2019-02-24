@@ -152,7 +152,7 @@ export default {
     methods: {
         getArticles () {
           fetch('/api/categorie',  {  
-              method: 'POST',
+              method: 'PUT',
               headers: {
                   'Accept': 'application/json',
                   'Content-type': 'application/json'
