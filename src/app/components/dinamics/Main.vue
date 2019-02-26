@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <b-carousel id="carousel1" class="cont"
+    <b-container fluid>
+        <b-carousel id="carousel1"
                 controls
                 indicators
-                :interval="3000"
+                :interval="2000"
                 img-width="1024"
                 img-height="480"
+                background="#ababab"
                 v-model="slide"
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd">
@@ -16,53 +17,62 @@
                 <h1 class="solo">Your security for us counts!</h1>
             </b-carousel-slide>
         </b-carousel>
-        <center>
-        <template v-for="(art, i) in this.$root.articles">
-            <div class="shop" :key="'art_' + i" :id="'art_' + i">
-                <div class="shop-img">
-                    <img :src=art[8] />
-                </div>
-                <div class="shop-body">
-                    <p id="namearticle">{{art[1]}}</p>
-                </div>
-                <b-popover triggers="hover click" :target="'art_' + i">
-                    <template slot="title">{{art[1]}}</template>
-                    <div>
-                        <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
-                            <strong>Type</strong><br>{{art[3]}}<br>
-                            <strong>Material</strong><br>{{art[4]}}<br>
-                            <strong>Size</strong><br>{{art[5]}}<br>
-                            <strong>Unit Price</strong><br>$ {{art[6]}}<br>
-                            <strong>Wholesale price</strong><br>$ {{art[7]}}<br>
-                        </p>
-                        <b-input-group class="mb-3">
-                            <b-input-group-prepend>
-                                <b-input-group-text>Quantity</b-input-group-text>
-                            </b-input-group-prepend>
-                            <b-form-input required type="number" class="form-control" placeholder="Ex. 12" min="1" v-model="quantity" />
-                        </b-input-group>
-                        <b-btn @click="addShoppingCart(art)" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
-                        <b-btn @click="addWishes(art[0])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
-                        <b-btn id="buttonbuy" class="colornav letraglobal" @click="registerInvoice(art[0])">Buy</b-btn>
-                    </div>
-                </b-popover>
-            </div>
-        </template>
-        </center>
-        <div class="flex-row align-items-center page noart" v-if="this.$root.articles.length == 0">
-            <div class="container">
-                <b-row class="justify-content-center">
-                    <b-col md="6">
-                        <div class="clearfix">
-                            <h2 class="float-left display-4 pt-3">Oops! We're sorry.</h2>
-                            <h3 class="text-muted">No articles found for the moment.</h3>
+        <br><br>
+        <b-row>
+            <b-col sm="9" lg="9" xl="9">
+                <template v-for="(art, i) in this.$root.articles">
+                    <div class="shop" :key="'art_' + i" :id="'art_' + i">
+                        <div class="shop-img">
+                            <img :src=art[8] />
                         </div>
-                    </b-col>
-                </b-row>
-            </div>
-        </div>
+                        <div class="shop-body">
+                            <center><p id="namearticle">{{art[1]}}</p></center>
+                        </div>
+                        <b-popover triggers="hover click" :target="'art_' + i">
+                            <template slot="title">{{art[1]}}</template>
+                            <div>
+                                <p class="letraglobalsinnegrita"><strong>Description</strong><br>{{art[2]}}<br>
+                                    <strong>Type</strong><br>{{art[3]}}<br>
+                                    <strong>Material</strong><br>{{art[4]}}<br>
+                                    <strong>Size</strong><br>{{art[5]}}<br>
+                                    <strong>Unit Price</strong><br>$ {{art[6]}}<br>
+                                    <strong>Wholesale price</strong><br>$ {{art[7]}}<br>
+                                </p>
+                                <b-input-group class="mb-3">
+                                    <b-input-group-prepend>
+                                        <b-input-group-text>Quantity</b-input-group-text>
+                                    </b-input-group-prepend>
+                                    <b-form-input required type="number" class="form-control" placeholder="Ex. 12" min="1" v-model="quantity" />
+                                </b-input-group>
+                                <b-btn @click="addShoppingCart(art)" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/carrito.png"></b-btn>
+                                <b-btn @click="addWishes(art[0])" size="sm" class="colornav"><img class="iconsown" src="imgs/icons/deseo.png"></b-btn>
+                                <b-btn id="buttonbuy" class="colornav letraglobal" @click="registerInvoice(art[0])">Buy</b-btn>
+                            </div>
+                        </b-popover>
+                    </div>
+                </template>
+                <div class="flex-row align-items-center page noart" v-if="this.$root.articles.length == 0">
+                    <div class="container">
+                        <b-row class="justify-content-center">
+                            <b-col md="6">
+                                <div class="clearfix">
+                                    <h2 class="float-left display-4 pt-3">Oops! We're sorry.</h2>
+                                    <h3 class="text-muted">No articles found for the moment.</h3>
+                                </div>
+                            </b-col>
+                        </b-row>
+                    </div>
+                </div>
+            </b-col>
+            <b-col sm="3" lg="3" xl="3">
+                <b-container fluid>
+                    <img width="100%" height="800px" src="imgs/articles/default.jpg">
+                </b-container>
+            </b-col>
+        </b-row>
+        <br><br>
         <router-view/>
-    </div>
+    </b-container>
 </template>
 
 <style>

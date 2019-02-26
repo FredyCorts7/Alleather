@@ -18,7 +18,6 @@ import ModifyData from './components/dinamics/funcionality/ModifyData.vue'
 import ListClient from './components/dinamics/funcionality/ListClient.vue'
 import ManageProvider from './components/dinamics/funcionality/ManageProvider.vue'
 import ManageStock from './components/dinamics/funcionality/ManageStock.vue'
-import Store from './store'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
@@ -103,7 +102,6 @@ const router = new Router({
 new Vue({
   el: '#app',
   render: h => h(App),
-  //Store,
   router,
   data: function () {
     return {
@@ -116,8 +114,5 @@ new Vue({
       wishes: [],
       articles: []
     }
-  },
-  /*created: function () {
-    console.log('****************',this.$store)
-  }*/
+  }
 })
