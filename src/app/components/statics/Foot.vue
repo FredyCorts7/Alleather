@@ -4,7 +4,8 @@
             <div class="row">
                 <div id="dashes-right" class="col-md-6 mt-md-0 mt-3">
                     <h5 class="foo">About Us</h5>
-                    <p>A business committed to the Colombian Industries of Moroccan Industry.<br>Database II Project 2018-2.</p>
+                    <p>A business committed to the Colombian Industries of Moroccan Industry.<br>Calle 22ª #6-69 Urbanización Trigal Contemporáneo
+                    <br>Cúcuta - Norte de Santander, Colombia<br>Contact: corteciso@gmail.com </p>
                 </div>
                 <hr class="clearfix w-100 d-md-none pb-3">
                 <div class="col-md-6 mb-md-0 mb-3">
@@ -14,11 +15,12 @@
                         <li><a href="http://twitter.com" target="_blank"><img class="twi" src="imgs/redes/twitternegro64.png"/></a></li>
                         <li><a href="http://instragram.com" target="_blank"><img class="ins" src="imgs/redes/instagramnegro64.png"/></a></li>
                         <li><a href="http://co.pinterest.com" target="_blank"><img class="pin" src="imgs/redes/pinsterestnegro64.png"/></a></li>
+                        <li><a href="https://www.google.com/maps/place/Urbanizacion+Trigal+Comtemporaneo/@7.9420693,-72.5059087,602m/data=!3m1!1e3!4m8!1m2!2m1!1sCalle+22%C2%AA+%236-69+Urbanizaci%C3%B3n+Trigal+Contempor%C3%A1neo!3m4!1s0x0:0xbac08dae47ae9655!8m2!3d7.9424847!4d-72.5051174" target="_blank"><img class="map" src="imgs/redes/mapsnegro64.png"/></a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="footer-copyright text-center py-3">© KLMF --- 2018 Copyright</div>
+        <div class="footer-copyright text-center py-3">© FKLSP - 2019 Copyright</div>
     </footer>
 </template>
 
@@ -51,5 +53,8 @@
     }
     .pin:hover {
         content: url("/imgs/redes/pinsterestblanco64.png")
+    }
+    .map:hover {
+        content: url("/imgs/redes/mapsblanco64.png")
     }
 </style>
