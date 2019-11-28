@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </template>
-                <b-btn class="colornav" block>Buy</b-btn>
+                <b-btn @click="this.registerInvoicewithDetail" class="colornav" block>Buy</b-btn>
             </center>
         </b-modal>
         <b-modal id="wishes" size="lg" hide-footer centered title="Your Wishes"
@@ -239,6 +239,60 @@ export default {
         }
     },
     methods: {
+        registerInvoicewithDetail() {
+            if (this.$root.shoppingcart.length > 0) {
+                let money = 0
+                let detailInvoice = []
+                for (let i = 0; i < this.$root.shoppingcart.length; i++) {
+                    money += this.$root.shoppingcart[i][6] * this.$root.shoppingcart[i][9]
+                    detailInvoice.push({
+                        artId: this.$root.shoppingcart[i][0],
+                        artCant: this.$root.shoppingcart[i][9]
+                    })
+                }
+                var invoice = {
+                    percode: this.$session.get('credent')[0],
+                    total: money
+                }
+                fetch(`/api/invoice/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(invoice)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        if (data.Error) this.$toastr.warning('Surgió un error al efectuar la compra', 'Invoice')
+                    })
+                    .catch(err => {
+                        var articleArray = { detailInvoice }
+                        fetch('/api/detail/', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-type': 'application/json'
+                            },
+                            body: JSON.stringify(articleArray)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data)
+                                if (data.Error) this.$toastr.warning('Surgió un error al efectuar la compra', 'Invoice')
+                            })
+                            .catch(err => {
+                                console.log('Add Detail')
+                            })
+                            
+                        this.$toastr.success('Add successfully', 'Add Invoice')
+                        this.$root.shoppingcart = []
+                    })
+            } else {
+                this.$toastr.warning('Tu carrito de compras no tiene articulos', 'Add Invoice')
+            }
+        },
         getWishes() {
             if (this.$session.exists()) {
                 this.$root.wishes = []

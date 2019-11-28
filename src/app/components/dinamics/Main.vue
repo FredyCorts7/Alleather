@@ -19,7 +19,8 @@
         </b-carousel>
         <br><br>
         <b-row>
-            <b-col sm="9" lg="9" xl="9">
+            <b-col sm="1" lg="1" xl="1"></b-col>
+            <b-col sm="10" lg="10" xl="10">
                 <template v-for="(art, i) in this.$root.articles">
                     <div class="shop" :key="'art_' + i" :id="'art_' + i">
                         <div class="shop-img">
@@ -64,11 +65,7 @@
                     </div>
                 </div>
             </b-col>
-            <b-col sm="3" lg="3" xl="3">
-                <b-container fluid>
-                    <img width="100%" height="800px" src="imgs/articles/default.jpg">
-                </b-container>
-            </b-col>
+            <b-col sm="1" lg="1" xl="1"></b-col>
         </b-row>
         <br><br>
         <router-view/>
@@ -182,24 +179,60 @@ export default {
     },
     methods: {
         registerInvoice(article) {
-            let money = article[6] * this.quantity
-            
-            fetch('/api/invoice/', + 1 + '&' + this.$session.get('credent')[0] + '&' + money)
-                .then(res => res.json())
-                .then(data => {
-                    this.$toastr.info('Successfully', 'Add Invoice')
+            if (this.$session.exists()) {
+                let money = article[6] * this.quantity
+                console.log(money)
+                console.log(this.$session.get('credent')[0])
+                var article = {
+                    artid: article[0],
+                    artcant: this.quantity,
+                    percode: this.$session.get('credent')[0],
+                    total: money
+                }
+                fetch(`/api/invoice/`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(article)
                 })
-        },
-        registerInvoicewithDetail(article) {
-            let money = 0
-            for (let i = 0; i < this.$root.shoppingcart.length; i++) {
-                money += this.$root.shoppingcart[6] * this.$root.shoppingcart[9]
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        if (data.Error) this.$toastr.warning('Surgió un error al efectuar la compra', 'Invoice')
+                    })
+                    .catch(err => {
+                        var articleArray = {
+                            detailInvoice: [
+                                {
+                                    artId: article.artid,
+                                    artCant: article.artcant
+                                }
+                            ]
+                        }
+                        fetch('/api/detail/', {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-type': 'application/json'
+                            },
+                            body: JSON.stringify(articleArray)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data)
+                                if (data.Error) this.$toastr.warning('Surgió un error al efectuar la compra', 'Invoice')
+                            })
+                            .catch(err => {
+                                console.log('Add Detail')
+                            })
+                            
+                        this.$toastr.success('Add successfully', 'Add Invoice')
+                    })
+            } else {
+                this.$toastr.warning('Debes iniciar sesión para poder efectuar éste proceso', 'Add Invoice')
             }
-            fetch('/api/invoice/', + 1 + '&' + this.$session.get('credent')[0] + '&' + money)
-                .then(res => res.json())
-                .then(data => {
-                    this.$toastr.info('Successfully', 'Add Invoice')
-                })
         },
         search (article) {
             var found = false
