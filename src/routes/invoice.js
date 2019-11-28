@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 const conn = require('../connection/connectOracle')
 
-router.get('/last', async (req, res) => {
-    sql = `select max(inv_id) as lastId from invoice`
-    await conn.open(sql, [], false, res)
+router.get('/:percode', async (req, res) => {
+    const { percode } = req.params
+    sql = `select inv_id, inv_date, inv_totalmoney from invoice where per_code = :percode`
+    await conn.open(sql, [percode], false, res)
 })
 
 router.post('/', async (req, res) => {

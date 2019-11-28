@@ -18,6 +18,7 @@ import ModifyData from './components/dinamics/funcionality/ModifyData.vue'
 import ListClient from './components/dinamics/funcionality/ListClient.vue'
 import ManageProvider from './components/dinamics/funcionality/ManageProvider.vue'
 import ManageStock from './components/dinamics/funcionality/ManageStock.vue'
+import ListInvoice from './components/dinamics/funcionality/ListInvoice.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
@@ -93,6 +94,11 @@ const router = new Router({
           path: '/profile/managestock',
           name: 'Manage Stock',
           component: ManageStock
+        },
+        {
+          path: '/profile/listinvoice',
+          name: 'List Invoice',
+          component: ListInvoice
         }
       ]
     }
