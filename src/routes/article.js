@@ -4,18 +4,18 @@ const conn = require('../connection/connectOracle')
 //const mail = require(`C:/Users/richa/Documents/VueProjects/alleather/src/connection`)
 
 router.get('/', async (request, response) => {
-    sql = `select a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image
-    from stock s, article a, size_art sa
-    where s.art_id = a.art_id and sa.size_id = s.size_id and art_active = 1
-    group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
+    sql = `select a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad",  p.pro_name as "Proveedor", s.art_image
+    from stock s, article a, size_art sa, provider p
+    where s.art_id = a.art_id and s.pro_nit = p.pro_nit and sa.size_id = s.size_id and art_active = 1 
+    group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), p.pro_name, s.art_image)`
     await conn.open(sql, [], false, response)
 })
 
 router.get('/:name', async (request, response) => {
-    sql = `select a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", (((a.art_price_wholesale/100) * s.price_unit) + s.price_unit) as "PrecioAlMayor", s.art_image
-    from stock s, article a, size_art sa
+    sql = `select a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, listagg(sa.size_name, ', ') within group(order by sa.size_name) as "Talla" , (((a.art_price_unit/100) * s.price_unit) + s.price_unit) as "PrecioPorUnidad", p.pro_name as "Proveedor", s.art_image
+    from stock s, article a, size_art sa, provider p
     where s.art_id = a.art_id and sa.size_id = s.size_id and lower(a.art_name) like lower('` + request.params.name + `%') and art_active = 1
-    group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), (((a.art_price_wholesale / 100) * s.price_unit) + s.price_unit), s.art_image)`
+    group by (a.art_id, a.art_name, a.art_descri, a.art_type, a.art_mat, (((a.art_price_unit / 100) * s.price_unit) + s.price_unit), p.pro_name, s.art_image)`
     await conn.open(sql, [], false, response)
 })
 /*

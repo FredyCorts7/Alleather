@@ -98,6 +98,7 @@
                         </div>
                     </div>
                 </template>
+                <p>Total a pagar: ${{this.$root.total}}</p>
                 <b-btn @click="this.registerInvoicewithDetail" class="colornav" block>Buy</b-btn>
             </center>
         </b-modal>
@@ -284,6 +285,7 @@ export default {
                             })
                             .catch(err => {
                                 console.log('Add Detail')
+                                this.$root.total = 0
                             })
                             
                         this.$toastr.success('Add successfully', 'Add Invoice')
@@ -344,10 +346,24 @@ export default {
                             this.$forceUpdate()
                             this.$toastr.info('Bienvenido ' + this.$root.credentials[0] + ' hace ' + this.$session.get('credent')[11] + ' dias no ingresabas', 'Log in')
                             this.closeModal()
+                            return fetch('/api/person/' + data[0][0], {
+                                method: 'PUT',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                }
+                            })
                         } else {
                             this.$toastr.warning('No concuerdan las credenciales', 'Log in')
                         }
-                })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("Estoy en resolve")
+                    })
+                    .catch(err => {
+                        console.log("Última fecha actualizada")
+                    })
             } else this.$toastr.warning('Todos los campos son obligatorios', 'Log in')
         },
         logOut () {

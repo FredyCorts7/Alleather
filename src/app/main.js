@@ -118,7 +118,8 @@ new Vue({
       ],
       shoppingcart: [],
       wishes: [],
-      articles: []
+      articles: [],
+      total: 0
     }
   }
 })

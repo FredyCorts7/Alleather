@@ -39,8 +39,8 @@ router.post('/:option', async (request, response) => {
     if (opt == 1) {
         var image = 'imgs/people/' + request.body.image
         sql = `insert into person(per_code, per_name, per_surname, per_sex, per_email, per_password, per_birthday, per_image, 
-            per_address, rol_id) 
-            values(:code, :name, :surname, :sex, :email, encod_pass(:pass), to_date(:birth, 'yyyy-mm-dd'), :image, :address, :rolid)`
+            per_address, rol_id, last_time) 
+            values(:code, :name, :surname, :sex, :email, encod_pass(:pass), to_date(:birth, 'yyyy-mm-dd'), :image, :address, :rolid, sysdate)`
         await conn.open(sql, [code, name, surname, sex, email, pass, birth, image, address, rolid], true, response)
     } else if (opt == 0) {
         sql = `insert into person(per_code, per_name, per_surname, per_sex, per_email, per_password, per_birthday, per_address, rol_id) 
@@ -48,6 +48,20 @@ router.post('/:option', async (request, response) => {
         await conn.open(sql, [code, name, surname, sex, email, pass, birth, address, rolid], true, response)
     }
 })
+
+router.put('/:percode', async (request, response) => {
+    const { percode } = parseInt(request.params)
+    const sql = `begin 
+            update_last_time(:percode, TO_CHAR(sysdate, 'dd-mm-yyyy')); 
+            end;`
+    await conn.open(sql, [percode], true, response)
+})
+
+/*router.delete('/:percode', async (request, response) => {
+    const { percode } = parseInt(request.params)
+    const sql = `select last_time(last_time) from person where per_code = :percode`
+    await conn.open(sql, [percode], false, response)
+})*/
 
 router.put('/', async(request, response) => {
     sql = `update person set 

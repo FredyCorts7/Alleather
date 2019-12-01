@@ -37,7 +37,7 @@
                                     <strong>Material</strong><br>{{art[4]}}<br>
                                     <strong>Size</strong><br>{{art[5]}}<br>
                                     <strong>Unit Price</strong><br>$ {{art[6]}}<br>
-                                    <strong>Wholesale price</strong><br>$ {{art[7]}}<br>
+                                    <strong>Provider</strong><br> {{art[7]}}<br>
                                 </p>
                                 <b-input-group class="mb-3">
                                     <b-input-group-prepend>
@@ -249,6 +249,7 @@ export default {
                 if (!this.search(article[0])) {
                     article[9] = this.quantity
                     this.$root.shoppingcart.push(article)
+                    this.$root.total += article[6] * article[9]
                     this.quantity = 1
                     this.$toastr.success('Add successfully', 'Add to Shopping Cart')
                 } else this.$toastr.warning('Already exist in your shopping cart', 'Add to Shopping Cart')
